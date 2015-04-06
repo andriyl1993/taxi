@@ -1,0 +1,118 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taxi</title>
+  <script src="{% static 'js/jquery.min.js' %}"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
+  <script src="{% static 'js/server_post.js' %}"></script>
+  <script src="{% static 'js/sign_up.js' %}"></script>
+</head>
+<body>
+	{% include 'topmenu.html' %}
+			<!--username',
+			'email',
+			'password',
+			'rating',
+			'photo',
+			'date_registration',
+			'favourite_drivers'
+
+			'username', 
+			'password',
+			'email', 'photo_car', 
+			'photo_driver_license', 
+			'photo_car_license', 
+			'rate_min', 
+			'rate_km_hightway', 
+			'rate_km_city', 
+			'about_me',
+			'coefficient_congestion',
+			'state',
+			'location',
+			'rating'-->	
+	<div class="container">
+    <div class="col-lg-6 offset-3">
+      <form id="reg_form" class="form-horizontal" action="/create_user/" method="post">
+        <fieldset>
+
+          {% csrf_token %}
+          <div id="legend">
+            <legend class="">Register</legend>
+          </div>
+
+          <div class="form-group">
+            <!-- Username -->
+            <label class="control-label"  for="username">Username</label>
+            <div class="controls">
+              <input type="text" id="username" name="username" placeholder="" class="form-control">
+              <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <!-- First name -->
+            <label class="control-label"  for="first_name">FirstName</label>
+            <div class="controls">
+              <input type="text" id="first_name" name="first_name" placeholder="" class="form-control">
+              <p class="help-block">First name can contain any letters, without spaces</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <!-- Last name -->
+            <label class="control-label"  for="last_name">LastName</label>
+            <div class="controls">
+              <input type="text" id="last_name" name="last_name" placeholder="" class="form-control">
+              <p class="help-block">Last name can contain any letters and '-', without spaces</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <!-- E-mail -->
+            <label class="control-label" for="email">E-mail</label>
+            <div class="controls">
+              <input type="text" id="email" name="email" placeholder="" class="form-control">
+              <p class="help-block">Please provide your E-mail</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <!-- Password-->
+            <label class="control-label" for="password">Password</label>
+            <div class="controls">
+              <input type="password" id="password" name="password" placeholder="" class="form-control">
+              <p class="help-block">Password should be at least 4 characters</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <!-- Password-->
+            <label class="control-label" for="password">Repeat your password</label>
+            <div class="controls">
+              <input type="password" id="password" name="password" placeholder="" class="form-control">
+              <p class="help-block">Password should be at least 4 characters</p>
+            </div>
+          </div>
+
+          <input type="radio" name="client" value="Client" id="client_radiobutton" checked="True"> Client<br>
+          <input type="radio" name="driver" id="driver_radiobutton" value="Driver"> Driver<br>
+
+          <div class="form-group" id="client_register_form" style="display:block;">
+            {% include 'client_register_form.html' %}
+          </div>
+          <div class="form-group" id="driver_register_form" style="display:none;">
+            {% include 'driver_register_form.html' %}
+          </div>
+      <div class="form-group">
+        <!-- Button -->
+        <button class="btn btn-primary" type="submit">Register</button>
+        <div class="controls"></div>
+      </div>
+    </fieldset>
+  </form>
+          
+</div>
+</div>
+</body>
+</html>
+
