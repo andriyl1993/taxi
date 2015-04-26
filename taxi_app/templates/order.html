@@ -1,0 +1,44 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taxi</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"></head>
+	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/order.js' %}"></script>
+<body>
+	<div>{% include 'topmenu.html' %}</div>
+	<div>{% include 'map.html' %}</div>
+	<div>
+		<form id="order_form" action="/get_driver_to_order/" method="post">
+			{% csrf_token %}
+			<div>
+				<p>
+					<input type="checkbox" name="is_coords">Coords</p>
+			</div>
+			<div>
+				<input type="text" name="start" id="start"></div>
+			<div>
+				<input type="text" name="end" id="end"></div>
+			<div>
+				<input type="datetime" name="datetime" placeholder="yyyy-mm-dd hh:mm"></div>
+			<div>
+				<input type="checkbox" name="is_fast">is fast</div>
+			<div>
+				<input type="checkbox" name="conditioner">conditioner</div>
+			<div>
+				<input type="text" name="type_salon">type_salon</div>
+			<div>
+				<div>
+					<input type="checkbox" name="place_from_things">place_from_things</div>
+				<div>
+					<div>
+						<input type="text" name="count_places">count_places</div>
+					<div>
+						<input id="create_order" type="submit" value="Send"></div>
+				</form>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

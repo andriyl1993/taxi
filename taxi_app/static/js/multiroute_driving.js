@@ -4,6 +4,7 @@ var multiRoute; //сам маршрут
 var geolocation;    //об’єкт геолокації
 var start, end;     //точки початку і кінця маршу
 var route_data;      //результати вимірювань для маршруту
+var my_place_coord;       //моя поточна позиція
 
 function way(start, end) {
     multiRoute = new ymaps.multiRouter.MultiRoute({
@@ -14,10 +15,12 @@ function way(start, end) {
     }, {
         boundsAutoApply: true
     });
+    //console.log(multiRoute.getLength());
     myMap.geoObjects.removeAll();
     myMap.geoObjects.add(multiRoute);
     //var routes = multiRoute.getRoutes();
     //console.log(routes.length);
+    console.log("way was created");
 }
 
 function add_controls_to_map(){
@@ -61,23 +64,20 @@ function create_way_from_names_of_places(){
     way(start, end);
     route_length();
     add_controls_to_map();
+    setTimeout('return_data_route()', 1000);
     start = "";
     end = "";
-    setTimeout('return_data_route()', 1000);
 }
 
 function create_way_from_points(){
     if((typeof start[0] !== "undefined" && typeof end[0] !== "undefined" && start[0] !== "undefined" && end[0] !== "undefined") || (start == "" && end == "")) {
         way(start, end);
         data = route_length();
-        //delete start[0];
-        //delete end[0];
         add_controls_to_map();
 
         setTimeout('return_data_route()', 3000);
         start[0] = "undefined"
         end[0] = "undefined"
-        console.log(start)
     }
 }
 
@@ -91,8 +91,16 @@ function return_data_route(){
     data = duration.split("&");
     data2 = data[1].split(";");
     duration = data[0]+data2[1];
-    data = Data_route(distance, duration);
-    $.getScript("server_post.js", post_route_data(data));
+    duration = String(duration).replace('ч','');
+    duration = String(duration).replace('мин','');
+    distance = String(distance).replace('км','');
+    data = {"distance": distance, "duration": duration}
+    $("#order_form input[name='distance']").attr('value', distance);
+    $("#order_form input[name='duration']").attr('value', duration);
+
+    //data = Data_route(distance, duration);
+    
+    //$.getScript("server_post.js", post_route_data(data));
     return data;
 }
 
@@ -105,7 +113,7 @@ function init () {
 
     // Сравним положение, вычисленное по ip пользователя и
     // положение, вычисленное средствами браузера.
-   /* geolocation.get({
+    geolocation.get({
         provider: 'yandex',
         mapStateAutoApply: true
     }).then(function (result) {
@@ -115,8 +123,8 @@ function init () {
             balloonContentBody: 'Мое местоположение'
         });
         myMap.geoObjects.add(result.geoObjects);
-    });*/
-    my_location_browser()
+    });
+    my_location_browser();
 }
 
 function my_location_browser() {
@@ -124,10 +132,9 @@ function my_location_browser() {
         provider: 'browser',
         mapStateAutoApply: true
     }).then(function (result) {
-        // Синим цветом пометим положение, полученное через браузер.
-        // Если браузер не поддерживает эту функциональность, метка не будет добавлена на карту.
         result.geoObjects.options.set('preset', 'islands#blueCircleIcon');
         myMap.geoObjects.add(result.geoObjects);
+        my_place_coord = result.geoObjects.position;
     });
 }
 
@@ -137,10 +144,9 @@ function my_place(){
         provider: 'browser',
         mapStateAutoApply: true
     }).then(function (result) {
-        pos[0] = result.geoObjects.position[0];
-        pos[1] = result.geoObjects.position[1];
+        my_place_coord = result.geoObjects.position;
     });
-    return pos;
+    return my_place_coord;
 }
 
 function createPoint(pos, text){
@@ -167,7 +173,6 @@ function click_on_map(){
     var pos = Array(2);
     myMap.events.add('click', function (e) {
         var coords = e.get('coords');
-        console.log("Cords = "  + coords);
         if ((typeof start === "undefined") || (typeof start[0] == "undefined") ) {
             start = Array(2);
             start[0] = coords[0].toPrecision(6);

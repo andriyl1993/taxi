@@ -5,16 +5,10 @@ $(function() {
 			type:"POST",
 			data: getToken() + "&username=" + $("#logging_username").val() + "&password=" + $("#logging_password").val(),
 			cached: false,
-			success: function(data){
-				/*res = jQuery.parseJSON(data);
-				if (res.status == "ok") {
-
-				}*/
-			}
+			success: function(data){}
 		})
 	});
 });
-
 
 $(function(){
 	$("#client_radiobutton").change(function(){

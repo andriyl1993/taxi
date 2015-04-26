@@ -1,17 +1,43 @@
 {% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Taxi</title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}">
-</head>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"></head>
+	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/main_menu.js' %}"></script>
 <body>
-<div>
-{% include 'topmenu.html' %}
-</div>
-<div>
-{% include 'map.html' %}
-</div>
+	<div>{% include 'topmenu.html' %}</div>
+	<div>{% include 'map.html' %}</div>
+	{% csrf_token %}
+	<div>
+		{% if user2.is_authorized %}
+			{% if user2.photo %}
+				<a href = 'order/'>Create order</a>
+			{% else %}
+				<a href = 'driver_order/'>Get order</a>
+			{% endif %}
+			<a href='history/'> History</a>
+			<a href='rating/'>Rating</a>
+			{% if user2.photo %}
+				<a href="favourite_drivers/">Favourite drivers</a>
+			{% endif %}
+
+			<input type="hidden" id="driver" value="{{ driver }}">
+			<div id="state">
+			{% if not user2.photo %}
+				<p>You is now in state 
+				{% if user2.state == 2 %}
+					<b>offline</b>
+				{% else %}
+					<b>online</b>
+				{% endif %}
+				</p>
+				<button id="change_state">Change state</button>
+			{% endif %}
+			</div>
+		{% endif %}
+	</div>
 </body>
 </html>

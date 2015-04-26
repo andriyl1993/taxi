@@ -99,7 +99,7 @@ class Migration(migrations.Migration):
                 ('date_registration', models.DateTimeField(default=datetime.datetime.now, auto_now_add=True)),
                 ('rating', models.IntegerField(default=0)),
                 ('is_authorized', models.BooleanField(default=False)),
-                ('add_service', models.OneToOneField(default=None, to='taxi_app.AddService')),
+                ('add_service', models.OneToOneField(null=True, default=None, to='taxi_app.AddService')),
             ],
             options={
             },
@@ -157,7 +157,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='driveruser',
             name='location',
-            field=models.OneToOneField(to='taxi_app.Location'),
+            field=models.OneToOneField(null=True, to='taxi_app.Location'),
             preserve_default=True,
         ),
         migrations.AddField(

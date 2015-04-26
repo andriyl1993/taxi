@@ -1,0 +1,18 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taxi</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"></head>
+	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/driver_orders.js' %}"></script>
+<body>
+	<div>{% include 'topmenu.html' %}</div>
+	<div>{% include 'map.html' %}</div>
+	{% csrf_token %}
+	<div class="order-container">
+		
+	</div>
+</body>
+</html>

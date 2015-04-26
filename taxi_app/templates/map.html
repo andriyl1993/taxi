@@ -10,7 +10,7 @@
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/multiroute_driving.js' %}"></script>
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/server_post.js' %}"></script>
 	<style>
-        html, body, #map {
+        #map {
             width: 600px; height: 400px; padding: 0; margin: 0;
         }
     </style>
@@ -20,15 +20,16 @@
 	{% block map %}
 	<div id="map"></div>
 	<div id="viewContainer"></div>
-	<div>
+	<!-- <div>
 	<label for="start">Точка відправлення</label>
 	<input type="text" name="start" id="start"><br>
 	<label for="end">Точка прибуття</label>
 	<input type="text" name="end" id="end" ><br>
-	<button onclick="create_way_from_names_of_places()">Прокласти шлях</button><br>
+	<button onclick="create_way_from_names_of_places()" onclick="only_way_res()">Прокласти шлях</button><br>
 	<button id="create_way" onclick="create_way_from_points()">Построить точками</button><br>
 	<button onclick="click_on_map()">Ставить точки початку і кінця маршруту</button><br>
-	</div>
+	
+	</div> -->
 	{% endblock map %}
 </body>
 </html>
