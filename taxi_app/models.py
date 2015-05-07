@@ -9,6 +9,9 @@ import json
 class Document(models.Model):
 	docfile = models.ImageField(upload_to='documents/%Y/%m/%d')
 
+	def __str__(self):
+		return self.docfile
+
 
 class Location(models.Model):
 	x = models.FloatField(default = 0, blank=True, null=True)

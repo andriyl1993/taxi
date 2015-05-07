@@ -1,0 +1,32 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Taxi</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.css' %}"></head>
+<body>
+	{% csrf_token %}
+	<div>{% include 'topmenu.html' %}</div>
+	{% if useruser.rate_min %}
+		<p>Driver - <b>{{ useruser.user }}</b></p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo_car.docfile}}">Photo car</p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo_car_license.docfile}}">Photo car license</p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo_driver_license.docfile}}">Photo driver license</p>
+		<p>About me: {{useruser.about_me}}</p>
+		<p>State - {{ useruser.state }}</p>
+		<p>Date registration - {{ useruser.date_registration }}</p>
+		<p>Rating - {{ useruser.rating }}</p>
+		<p>Add servece:</p>
+		<p>Conditioner - {{ useruser.add_service.conditioner }}</p>
+		<p>Type salon - {{ useruser.add_service.type_salon }}</p>
+		<p>place for things - {{ useruser.add_service.place_from_things }}</p>
+		<p>Count places - {{ useruser.add_service.count_places }}</p>
+	{% else %}
+		<p>Driver - <b>{{ useruser.client_user }}</b></p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo.docfile}}">Photo car</p>
+		<p>Rating - {{ useruser.rating }}</p>
+		<p>Date registration - {{ useruser.date_registration }}</p>
+	{% endif %}
+</body>
+</html>

@@ -16,7 +16,9 @@
 	   </tr>
 		{% for d in fd %}
 			<tr> 
-				<td>{{ d.user }}</td>
+				<td><a href="/driver_profile/{{ d.user }}">{{ d.user }}</a></td>
+				<td>{% if d.state == 0 %} online {% elif d.state == 1 %} has order {% else %} offline {% endif %}</td>
+				<td><a href="/order/{{ d.user.username }}">Create order</a></td>
 			</tr>
 		{% endfor %}
 	</table>

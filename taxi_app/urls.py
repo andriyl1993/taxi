@@ -25,6 +25,16 @@ urlpatterns = [
 	url(r'^mark_rating/', mark_rating),
 	url(r'^add_to_favourite/', add_to_favourite),
 	url(r'^favourite_drivers', favourite_drivers),
+	url(r'^driver_profile/', driver_profile),
+	url(r'^client_profile/', client_profile),
+
 
 	url(r'^get_result_from_driver/', get_result_from_driver),
 ]
+
+from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.conf import settings
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns += staticfiles_urlpatterns()
