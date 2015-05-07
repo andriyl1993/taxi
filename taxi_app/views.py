@@ -3,7 +3,7 @@
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout as outlog
 from models import *
-from serializers import *
+#from serializers import *
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
@@ -11,9 +11,7 @@ import datetime
 import json
 from forms import ImageForm
 from collections import defaultdict
-from methods import *
 import simplejson
-import yaml
 
 from django.views.generic import TemplateView
 

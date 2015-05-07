@@ -55,7 +55,7 @@ class DriverUser(models.Model):
 	coefficient_congestion = models.FloatField(default = 1)
 	state = models.IntegerField()
 	location = models.OneToOneField(Location, null=True)#, choices = locations, default = locations[0])
-	date_registration = models.DateTimeField(auto_now_add=True, default = datetime.datetime.now)
+	date_registration = models.DateTimeField(auto_now_add=True )
 	rating = models.IntegerField(default = 0)
 	add_service = models.OneToOneField(AddService, default = None, null=True)
 	is_authorized = models.BooleanField(default = False)
