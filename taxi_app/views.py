@@ -17,6 +17,9 @@ import yaml
 
 from django.views.generic import TemplateView
 
+
+driver_state = ['online','has order','offline']
+
 def index(request):
 	try:
 		print request.user 
@@ -221,6 +224,8 @@ def get_driver_to_order(request):
 	
 	print "is_fast = " + str(order.is_fast)
 
+	driver_name = request.POST.get('driver_name')
+
 	ads = AddService()
 	if request.POST.get('conditioner') != None:
 		ads.conditioner = request.POST.get('conditioner')
@@ -241,7 +246,9 @@ def get_driver_to_order(request):
 	
 	ads.save()
 	order.add_service = ads
-
+	if driver_name != "":
+		driver = DriverUser.objects.filter(user__username = driver_name)
+		order.driver = driver[0]
 	order.save()
 
 	alldu = DriverUser.objects.all()
@@ -261,8 +268,13 @@ def get_driver_to_order(request):
 	############################################
 
 	js_order = json.dumps(order.to_json())
-	json_drivers = query_to_json(drivers)
-
+	if driver_name == "":
+		json_drivers = query_to_json(drivers)
+	else:
+		drivers = []
+		drivers.append(order.driver)
+		json_drivers = query_to_json(drivers)
+	
 	return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
 
 
@@ -532,7 +544,15 @@ def favourite_drivers(request):
 	try:
 		if request.user.is_authenticated():
 			fd = ClientUser.objects.get(client_user__username = request.user).favourite_drivers.all()
-			return render(request, "favourite_drivers.html", {'fd': fd})
+			return render(request, "favourite_drivers.html", {'fd': fd, 'states': driver_state})
 	except Exception, e:
 		print str(e)
 			
+
+def driver_profile(request):
+	user = DriverUser.objects.get(user__username = request.path.split('/')[-1])
+	return render(request, "user_profile.html", {'useruser':user})
+
+def client_profile(request):
+	user = ClientUser.objects.get(client_user__username = request.path.split('/')[-1])
+	return render(request, "user_profile.html", {'useruser':user})

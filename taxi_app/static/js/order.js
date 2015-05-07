@@ -3,6 +3,14 @@ function getToken() {
 	return 'csrfmiddlewaretoken=' + token;
 }
 
+$(function() {
+	ref = window.location.href.split('/');
+	if (ref.length == 5) {
+		$("#driver_name").attr("value", ref[4]);
+	}
+});
+
+
 $(function(){
 	$("input[name='is_coords']").change(function() {
 		if(this.checked){
