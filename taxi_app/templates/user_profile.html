@@ -1,4 +1,5 @@
 {% load staticfiles %}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,11 +9,11 @@
 <body>
 	{% csrf_token %}
 	<div>{% include 'topmenu.html' %}</div>
-	{% if useruser.rate_min %}
+	{% if type_user == "driver" %}
 		<p>Driver - <b>{{ useruser.user }}</b></p>
-		<p><img  width="100" height="100" src="/media/{{useruser.photo_car.docfile}}">Photo car</p>
-		<p><img  width="100" height="100" src="/media/{{useruser.photo_car_license.docfile}}">Photo car license</p>
-		<p><img  width="100" height="100" src="/media/{{useruser.photo_driver_license.docfile}}">Photo driver license</p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo_car.docfile}}" alt="no photo">Photo car</p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo_car_license.docfile}}"  alt="no photo">Photo car license</p>
+		<p><img  width="100" height="100" src="/media/{{useruser.photo_driver_license.docfile}}" alt="no photo">Photo driver license</p>
 		<p>About me: {{useruser.about_me}}</p>
 		<p>State - {{ useruser.state }}</p>
 		<p>Date registration - {{ useruser.date_registration }}</p>
@@ -22,11 +23,85 @@
 		<p>Type salon - {{ useruser.add_service.type_salon }}</p>
 		<p>place for things - {{ useruser.add_service.place_from_things }}</p>
 		<p>Count places - {{ useruser.add_service.count_places }}</p>
+
+
+		{% if useruser.user == user %}
+			ewejy4ty
+		{% endif %}
+
 	{% else %}
-		<p>Driver - <b>{{ useruser.client_user }}</b></p>
-		<p><img  width="100" height="100" src="/media/{{useruser.photo.docfile}}">Photo car</p>
+		<p>Client - <b>{{ useruser.client_user }}</b></p>
+		<p><img  width="100" height="100" src="/media/{{ useruser.photo.docfile }}" alt="no photo">Photo</p>
 		<p>Rating - {{ useruser.rating }}</p>
 		<p>Date registration - {{ useruser.date_registration }}</p>
+
+		{% if useruser.client_user == user %}
+			<form id="change_client_data" action="/change_client_data/" method="post">
+			
+				<div class="form-group">
+            <!-- Username -->
+            <label class="control-label"  for="username">Username</label>
+            <div class="controls">
+              <input type="text" value="{{ useruser.client_user.username }}" id="username" name="username" placeholder="" class="form-control">
+              <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <!-- First name -->
+            <label class="control-label"  for="first_name">FirstName</label>
+            <div class="controls">
+              <input type="text" value="{{ useruser.client_user.first_name }}" id="first_name" name="first_name" placeholder="" class="form-control">
+              <p class="help-block">First name can contain any letters, without spaces</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <!-- Last name -->
+            <label class="control-label"  for="last_name">LastName</label>
+            <div class="controls">
+              <input type="text" value="{{ useruser.client_user.last_name }}" id="last_name" name="last_name" placeholder="" class="form-control">
+              <p class="help-block">Last name can contain any letters and '-', without spaces</p>
+            </div>
+          </div>
+          <div class="form-group">
+            <!-- E-mail -->
+            <label class="control-label" for="email">E-mail</label>
+            <div class="controls">
+              <input type="text" value="{{ useruser.client_user.email }}" id="email" name="email" placeholder="" class="form-control">
+              <p class="help-block">Please provide your E-mail</p>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <!-- Password-->
+            <label class="control-label" for="password">Password</label>
+            <div class="controls">
+              <input type="password" id="password" name="password" placeholder="" class="form-control">
+              <p class="help-block">Password should be at least 4 characters</p>
+            </div>
+          </div>
+          {% csrf_token %}
+
+          <div class="form-group">
+            <!-- Password-->
+            <label class="control-label" for="password">Repeat your password</label>
+            <div class="controls">
+              <input type="password" id="password" name="password" placeholder="" class="form-control">
+              <p class="help-block">Password should be at least 4 characters</p>
+            </div>
+          </div>
+          	<div class="container">
+				<div class="col-lg-6 offset-3">
+				    <input class="btn btn-default" type="file" name="photo">
+				</div>
+			</div>
+				<div class="form-group">
+		        <!-- Button -->
+		        	<button class="btn btn-primary" type="submit">Change</button>
+		        <div class="controls"></div>
+     		</div>
+			</form>	
+		{% endif %}
 	{% endif %}
 </body>
 </html>

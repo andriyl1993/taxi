@@ -43,6 +43,8 @@ def sign_up(request):
 	return render(request, 'Signup.html')
 
 def logging(request):
+	if not request.POST:
+		return redirect('/sign_up/')
 	username = request.POST['username']
 	password = request.POST['password']
 	user = authenticate(username=username, password=password)
@@ -52,8 +54,11 @@ def logging(request):
 			try:
 				user2 = ClientUser.objects.get(client_user = user)
 			except:
-				user2 = DriverUser.objects.get(user = user)
-				user2.state = 0
+				try:
+					user2 = DriverUser.objects.get(user = user)
+					user2.state = 0
+				except:
+					return redirect('/sign_up/')
 			user2.is_authorized = True
 			user2.save()
 			return redirect('/')
@@ -66,9 +71,13 @@ def logout(request):
 	try:
 		user = ClientUser.objects.get(client_user = request.user)
 	except:
-		user = DriverUser.objects.get(user = request.user)
-		#for test
-		user.state = 2
+		try:
+			user = DriverUser.objects.get(user = request.user)
+			#for test
+			user.state = 2
+		except Exception, e:
+			print "logout = " + str(e)
+			return redirect('/')
 
 
 	user.is_authorized = False
@@ -222,10 +231,7 @@ def get_driver_to_order(request):
 		order.is_fast = False
 	order.client = ClientUser.objects.get(client_user = request.user)
 	
-	print "is_fast = " + str(order.is_fast)
-
 	driver_name = request.POST.get('driver_name')
-
 	ads = AddService()
 	if request.POST.get('conditioner') != None:
 		ads.conditioner = request.POST.get('conditioner')
@@ -256,7 +262,6 @@ def get_driver_to_order(request):
 	#filter(location__x__gte = order.start_location.x - 0.1).filter(location__x__lte = order.start_location.x + 0.1).filter(location__y__gte = order.start_location.y - 0.1).filter(location__y__lte = order.start_location.y + 0.1)
 	drivers = DriverUser.objects.filter(state = 0)
 
-
 	if ads.conditioner == True:
 		drivers = drivers.filter(add_service__conditioner = True)
 	if ads.type_salon != 0:
@@ -268,13 +273,16 @@ def get_driver_to_order(request):
 	############################################
 
 	js_order = json.dumps(order.to_json())
+	
 	if driver_name == "":
 		json_drivers = query_to_json(drivers)
+		print json_drivers
 	else:
 		drivers = []
 		drivers.append(order.driver)
 		json_drivers = query_to_json(drivers)
-	
+		print json_drivers
+
 	return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
 
 
@@ -304,7 +312,7 @@ def return_driver_data_result(request):
 		lengths = []
 		for r in results:
 			try:
-				print r
+				print results
 				driver = DriverUser.objects.get(user__username = r['username'])
 				cost = driver.rate_km_city * float(r['distance'].replace(',', '.')) + float(r['distance_to_client'].replace(',', '.')) * driver.rate_without_client
 				if cost < driver.rate_min:
@@ -373,7 +381,7 @@ def result_order(request):
 			order.order_costs = order.order_costs[len(order.order_costs.split(',')[0]) + 1:]
 			order.order_times = order.order_times[len(order.order_times.split(',')[0]) + 1:]
 			if order.order_drivers.encode('ascii','ignore') != "":
-				driver = order.order_drivers.splt(',')[0]
+				driver = order.order_drivers.split(',')[0]
 				driver = DriverUser.objects.get(user__username = driver)
 				order.driver = driver
 				order.state = 1
@@ -389,9 +397,7 @@ def last_result(request):
 	try:
 		order = request.POST.get('order')
 		order = Order.objects.get(pk = order)
-		print "pk = " + str(order.pk)
-		print "state = " + str(order.state)
-		if order.state == 1:
+		if order.state == 3:
 			return HttpResponse(json.dumps({'status':'ok'}))
 		elif order.state == 2:
 			return HttpResponse(json.dumps({'status':'clear'}))
@@ -483,7 +489,9 @@ def rating(request):
 			orders = Order.objects.filter(client = us)
 			ratings = ClientRating.objects.filter(client__client_user__username = user)
 		count_orders = len(ratings)
-		rating = float(sum([r.value for r in ratings])) / float(count_orders)
+		rating = 0
+		if count_orders > 0:
+			rating = float(sum([r.value for r in ratings])) / float(count_orders)
 		return render(request, "rating.html", {"ratings": ratings, "mark": rating})
 	else:
 		return HttpResponse("ERROR")
@@ -550,9 +558,32 @@ def favourite_drivers(request):
 			
 
 def driver_profile(request):
-	user = DriverUser.objects.get(user__username = request.path.split('/')[-1])
-	return render(request, "user_profile.html", {'useruser':user})
+	if request.path.split('/')[-1] != "":
+		user = DriverUser.objects.get(user__username = request.path.split('/')[-1])
+	else:
+		user = DriverUser.objects.get(user__username = request.user.username)
+	return render(request, "user_profile.html", {'useruser':user, "type_user": "driver"})
 
 def client_profile(request):
-	user = ClientUser.objects.get(client_user__username = request.path.split('/')[-1])
-	return render(request, "user_profile.html", {'useruser':user})
+	if request.path.split('/')[-1] != "":
+		user = ClientUser.objects.get(client_user__username = request.path.split('/')[-1])
+	else:
+		user = ClientUser.objects.get(client_user__username = request.user.username)
+	return render(request, "user_profile.html", {'useruser':user, "type_user": "client"})
+
+def change_client_data(request):
+	client = ClientUser.objects.get(client_user = request.user)
+	user = User.objects.get(username = request.user.username)
+
+	user.first_name = request.POST.get('first_name')
+	user.last_name = request.POST.get('last_name')
+	user.email = request.POST.get('email')
+	if request.POST.get('password'):
+		user.set_password(request.POST.get('password'))
+	user.username = request.POST.get('username')
+	user.save()
+	
+	if request.POST.get('photo'):
+		client.photo.docfile = request.POST.get('photo')
+		client.save()
+	return redirect('/client_profile/')

@@ -10,7 +10,7 @@ class Document(models.Model):
 	docfile = models.ImageField(upload_to='documents/%Y/%m/%d')
 
 	def __str__(self):
-		return self.docfile
+		return str(self.docfile)
 
 
 class Location(models.Model):

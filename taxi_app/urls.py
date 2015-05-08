@@ -30,6 +30,7 @@ urlpatterns = [
 
 
 	url(r'^get_result_from_driver/', get_result_from_driver),
+	url(r'^change_client_data/', change_client_data),
 ]
 
 from django.conf.urls.static import static

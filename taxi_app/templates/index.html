@@ -22,6 +22,7 @@
 			<a href='rating/'>Rating</a>
 			{% if user2.photo %}
 				<a href="favourite_drivers/">Favourite drivers</a>
+				<a href="/client_profile/">My profile</a>
 			{% endif %}
 
 			<input type="hidden" id="driver" value="{{ driver }}">
@@ -37,6 +38,9 @@
 				<button id="change_state">Change state</button>
 			{% endif %}
 			</div>
+			{% if not user2.photo %}
+				<a href="/driver_profile/">My profile</a>
+			{% endif %}
 		{% endif %}
 	</div>
 </body>
