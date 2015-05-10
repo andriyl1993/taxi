@@ -36,8 +36,8 @@
     var nextIndex = parseInt(totalForms.val(), 10);
     var maxForms = $("#id_" + options.prefix + "-MAX_NUM_FORMS").prop("autocomplete", "off");
     // only show the add button if we are allowed to add more items,
-        // note that max_num = None translates to a blank string.
-    var showAddButton = maxForms.val() === '' || (maxForms.val()-totalForms.val()) > 0;
+    // note that max_num = None translates to a blank string.
+    var showAddButton = maxForms.val() === '' || (maxForms.val() - totalForms.val()) > 0;
     $this.each(function(i) {
       $(this).not("." + options.emptyCssClass).addClass(options.formCssClass);
     });
@@ -65,11 +65,11 @@
         if (row.is("tr")) {
           // If the forms are laid out in table rows, insert
           // the remove button into the last table cell:
-          row.children(":last").append('<div><a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + "</a></div>");
+          row.children(":last").append('<div><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText + "</a></div>");
         } else if (row.is("ul") || row.is("ol")) {
           // If they're laid out as an ordered/unordered list,
           // insert an <li> after the last list item:
-          row.append('<li><a class="' + options.deleteCssClass +'" href="javascript:void(0)">' + options.deleteText + "</a></li>");
+          row.append('<li><a class="' + options.deleteCssClass + '" href="javascript:void(0)">' + options.deleteText + "</a></li>");
         } else {
           // Otherwise, just insert the remove button as the
           // last child element of the form's container:
@@ -84,7 +84,7 @@
         $(totalForms).val(parseInt(totalForms.val(), 10) + 1);
         nextIndex += 1;
         // Hide add button in case we've hit the max, except we want to add infinitely
-        if ((maxForms.val() !== '') && (maxForms.val()-totalForms.val()) <= 0) {
+        if ((maxForms.val() !== '') && (maxForms.val() - totalForms.val()) <= 0) {
           addButton.parent().hide();
         }
         // The delete button of each row triggers a bunch of other things
@@ -102,13 +102,12 @@
           var forms = $("." + options.formCssClass);
           $("#id_" + options.prefix + "-TOTAL_FORMS").val(forms.length);
           // Show add button again once we drop below max
-          if ((maxForms.val() === '') || (maxForms.val()-forms.length) > 0) {
+          if ((maxForms.val() === '') || (maxForms.val() - forms.length) > 0) {
             addButton.parent().show();
           }
           // Also, update names and ids for all remaining form controls
           // so they remain in sequence:
-          for (var i=0, formCount=forms.length; i<formCount; i++)
-          {
+          for (var i = 0, formCount = forms.length; i < formCount; i++) {
             updateElementIndex($(forms).get(i), options.prefix, i);
             $(forms.get(i)).find("*").each(function() {
               updateElementIndex(this, options.prefix, i);
@@ -126,15 +125,15 @@
 
   /* Setup plugin defaults */
   $.fn.formset.defaults = {
-    prefix: "form",          // The form prefix for your django formset
-    addText: "add another",      // Text for the add link
-    deleteText: "remove",      // Text for the delete link
-    addCssClass: "add-row",      // CSS class applied to the add link
-    deleteCssClass: "delete-row",  // CSS class applied to the delete link
-    emptyCssClass: "empty-row",    // CSS class applied to the empty row
-    formCssClass: "dynamic-form",  // CSS class applied to each form in a formset
-    added: null,          // Function called each time a new form is added
-    removed: null          // Function called each time a form is deleted
+    prefix: "form", // The form prefix for your django formset
+    addText: "add another", // Text for the add link
+    deleteText: "remove", // Text for the delete link
+    addCssClass: "add-row", // CSS class applied to the add link
+    deleteCssClass: "delete-row", // CSS class applied to the delete link
+    emptyCssClass: "empty-row", // CSS class applied to the empty row
+    formCssClass: "dynamic-form", // CSS class applied to each form in a formset
+    added: null, // Function called each time a new form is added
+    removed: null // Function called each time a form is deleted
   };
 
 
@@ -158,14 +157,14 @@
     var updateSelectFilter = function() {
       // If any SelectFilter widgets are a part of the new form,
       // instantiate a new SelectFilter instance for it.
-      if (typeof SelectFilter != 'undefined'){
-        $('.selectfilter').each(function(index, value){
+      if (typeof SelectFilter != 'undefined') {
+        $('.selectfilter').each(function(index, value) {
           var namearr = value.name.split('-');
-          SelectFilter.init(value.id, namearr[namearr.length-1], false, options.adminStaticPrefix );
+          SelectFilter.init(value.id, namearr[namearr.length - 1], false, options.adminStaticPrefix);
         });
-        $('.selectfilterstacked').each(function(index, value){
+        $('.selectfilterstacked').each(function(index, value) {
           var namearr = value.name.split('-');
-          SelectFilter.init(value.id, namearr[namearr.length-1], true, options.adminStaticPrefix );
+          SelectFilter.init(value.id, namearr[namearr.length - 1], true, options.adminStaticPrefix);
         });
       }
     };
@@ -173,9 +172,9 @@
     var initPrepopulatedFields = function(row) {
       row.find('.prepopulated_field').each(function() {
         var field = $(this),
-            input = field.find('input, select, textarea'),
-            dependency_list = input.data('dependency_list') || [],
-            dependencies = [];
+          input = field.find('input, select, textarea'),
+          dependency_list = input.data('dependency_list') || [],
+          dependencies = [];
         $.each(dependency_list, function(i, field_name) {
           dependencies.push('#' + row.find('.field-' + field_name).find('input, select, textarea').attr('id'));
         });
@@ -224,14 +223,14 @@
 
     var updateSelectFilter = function() {
       // If any SelectFilter widgets were added, instantiate a new instance.
-      if (typeof SelectFilter != "undefined"){
-        $(".selectfilter").each(function(index, value){
+      if (typeof SelectFilter != "undefined") {
+        $(".selectfilter").each(function(index, value) {
           var namearr = value.name.split('-');
-          SelectFilter.init(value.id, namearr[namearr.length-1], false, options.adminStaticPrefix);
+          SelectFilter.init(value.id, namearr[namearr.length - 1], false, options.adminStaticPrefix);
         });
-        $(".selectfilterstacked").each(function(index, value){
+        $(".selectfilterstacked").each(function(index, value) {
           var namearr = value.name.split('-');
-          SelectFilter.init(value.id, namearr[namearr.length-1], true, options.adminStaticPrefix);
+          SelectFilter.init(value.id, namearr[namearr.length - 1], true, options.adminStaticPrefix);
         });
       }
     };
@@ -239,9 +238,9 @@
     var initPrepopulatedFields = function(row) {
       row.find('.prepopulated_field').each(function() {
         var field = $(this),
-            input = field.find('input, select, textarea'),
-            dependency_list = input.data('dependency_list') || [],
-            dependencies = [];
+          input = field.find('input, select, textarea'),
+          dependency_list = input.data('dependency_list') || [],
+          dependencies = [];
         $.each(dependency_list, function(i, field_name) {
           dependencies.push('#' + row.find('.form-row .field-' + field_name).find('input, select, textarea').attr('id'));
         });
