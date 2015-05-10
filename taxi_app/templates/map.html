@@ -1,24 +1,10 @@
 {% load staticfiles %}
-
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Маршрути</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/multiroute_driving.js' %}"></script>
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/server_post.js' %}"></script>
-	<style>
-        #map {
-            width: 600px; height: 400px; padding: 0; margin: 0;
-        }
-    </style>
-</head>
-<body>
 	{% csrf_token %}
 	{% block map %}
-	<div id="map"></div>
+	<div id="map" style="width: auto; height: 400px; padding: 0; margin: 0;"></div>
 	<div id="viewContainer"></div>
 	<!-- <div>
 	<label for="start">Точка відправлення</label>
@@ -31,5 +17,3 @@
 	
 	</div> -->
 	{% endblock map %}
-</body>
-</html>
