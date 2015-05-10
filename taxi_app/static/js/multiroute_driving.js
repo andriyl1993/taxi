@@ -7,6 +7,7 @@ var route_data;      //результати вимірювань для марш
 var my_place_coord;       //моя поточна позиція
 
 function way(start, end) {
+    var way_variable_deferred = $.Deferred();
     multiRoute = new ymaps.multiRouter.MultiRoute({
         referencePoints: [ start, end ],
         params: {
@@ -15,12 +16,15 @@ function way(start, end) {
     }, {
         boundsAutoApply: true
     });
-    //console.log(multiRoute.getLength());
     myMap.geoObjects.removeAll();
     myMap.geoObjects.add(multiRoute);
     //var routes = multiRoute.getRoutes();
-    //console.log(routes.length);
-    console.log("way was created");
+    way_variable_deferred.resolve();
+    return $.Deferred(function(def) {
+        $.when(way_variable_deferred).done(function() {
+            def.resolve();
+        })
+    })
 }
 
 function add_controls_to_map(){
@@ -198,6 +202,9 @@ function Data_route(length, time) {
 
 
 function route_length() {
+    
+    var deferred_var = $.Deferred();
+
     var multiRouteModel = new ymaps.multiRouter.MultiRouteModel([ start, end ], {
         boundsAutoApply: true
     });
@@ -221,6 +228,7 @@ function route_length() {
         this.rebuildOutput();
         multiRouteModel.events
             .add(["requestsuccess", "requestfail", "requestsend"], this.onModelStateChange, this);
+        return "data";
     }
 
     // Таблица соответствия идентификатора состояния имени его обработчика.
@@ -283,12 +291,13 @@ function route_length() {
         processRoute: function (index, route) {
             // Берем из таблицы обработчик для данного типа маршрута и применяем его.
             var processorName = CustomView.routeProcessors[route.properties.get("type")];
-            return (index + 1) + ". " + this[processorName](route);
+            return this[processorName](route);
         },
 
         processDrivingRoute: function (route) {
-            var result = ["Автомобильный маршрут."];
-            result.push(this.createCommonRouteOutput(route));
+            var result = [""];
+            //result.push(this.createCommonRouteOutput(route));
+            this.createCommonRouteOutput(route);
             return result.join("<br/>");
         },
 
@@ -298,18 +307,28 @@ function route_length() {
             dur = route.properties.get("duration").text;
             if (typeof route_data == "undefined")
                 route_data = new Data_route(dis, dur);
-            return "Протяженность маршрута: " + "<div id=\"route_data_distance\">" +route.properties.get("distance").text+ "</div>" + "<br/>" +
+            var data = "Протяженность маршрута: " + "<div id=\"route_data_distance\">" +route.properties.get("distance").text+ "</div>" + "<br/>" +
                 "Время в пути: " + "<div id=\"route_data_duration\">" + route.properties.get("duration").text + "</div>";
+            $("#viewContainer").append(data);
+            deferred_var.resolve();
+            
         },
 
         destroy: function () {
             this.outputElement.remove();
             this.multiRouteModel.events
                 .remove(["requestsuccess", "requestfail", "requestsend"], this.onModelStateChange, this);
+
         }
     });
     provide(CustomView);
+    
 })
+    return $.Deferred(function(def) {
+            $.when(deferred_var).done(function() {
+            def.resolve();
+        })
+    })
 }
 
 
