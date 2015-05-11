@@ -1,5 +1,4 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,66 +9,83 @@
 <body>
 	{% csrf_token %}
 	<div>{% include 'topmenu.html' %}</div>
-	
-	<table>
-		<tr>
-			{% if user_ == "client" %}
-				<th>Driver</th>
-			{% else %}
-				<th>Client</th>
-			{% endif %}
-			<th>Cost</th>
-			<th>Date</th>
-			<th>Start</th>
-			<th>End</th>
-			<th>Time Travel</th>
-			<th>Long Travel</th>
-			<th>State</th>
-			<th>Rating</th>
-			<th></th>
-	   </tr>
-		{% for r in result %}
-			<tr> 
-				<td>{% if user == "client" %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">{% include 'leftmenu.html' %}</div>
+			<div class="col-md-10">
+				<table class="table table-bordered">
+					<tr>
+						{% if user_ == "client" %}
+						<th>Driver</th>
+						{% else %}
+						<th>Client</th>
+						{% endif %}
+						<th>Cost</th>
+						<th>Date</th>
+						<th>Start</th>
+						<th>End</th>
+						<th>Time Travel</th>
+						<th>Long Travel</th>
+						<th>State</th>
+						<th>Rating</th>
+						<th></th>
+					</tr>
+					{% for r in result %}
+					<tr>
+						<td>
+							{% if user == "client" %}
 						{{ r.0.driver.user }}
 					{% else %}
 						{{ r.0.client.client_user }}
 					{% endif %}
-				</td>
-				<td>{{ r.0.cost }}</td>
-				<td>{{ r.0.date }}</td>
-				<td>
-					{% if r.0.start_location.city != "" %} 
+						</td>
+						<td>{{ r.0.cost }}</td>
+						<td>{{ r.0.date }}</td>
+						<td>
+							{% if r.0.start_location.city != "" %} 
 						{{ r.0.start_location.city }},{{ r.0.start_location.street }},{{ r.0.start_location.building }}
 					{% else %}
 						{{ r.0.start_location.x }},{{ r.0.start_location.y }}
 					{% endif %}
-				</td>
-				<td>
-					{% if r.0.end_location.city != "" %} 
+						</td>
+						<td>
+							{% if r.0.end_location.city != "" %} 
 						{{ r.0.end_location.city }},{{ r.0.end_location.street }},{{ r.0.end_location.building }}
 					{% else %}
 						{{ r.0.end_location.x }},{{ r.0.end_location.y }}
-					{% endif %}</td>
-				<td>{{ r.0.time_travel }}</td>
-				<td>{{ r.0.long_travel }}</td>
-				<td>{{ r.1 }}</td>
+					{% endif %}
+						</td>
+						<td>{{ r.0.time_travel }}</td>
+						<td>{{ r.0.long_travel }}</td>
+						<td>{{ r.1 }}</td>
 
-				<td>{% if user_ == "driver" %} 
+						<td>
+							{% if user_ == "driver" %} 
 						{{ r.0.client_rating.value }}
 					{% else %}
 						{{ r.0.driver_rating.avarage_value }}
 					{% endif %}
-				</td>
-				<td style="display: none" class="pk">{{ r.0.pk }}</td>
-				<td><button class="mark">Mark</button></td>
-				<td>{% if user_ == "client" %} 
-						<input type="button" class="add_to_favourite" value="Add to favourite"> 
-					{% endif %}
-				</td>
-			</tr>
-		{% endfor %}
-	</table>
-	<a href="/">Back</a>
+						</td>
+						<td style="display: none" class="pk">{{ r.0.pk }}</td>
+						<td>
+							<button class="mark">Mark</button>
+						</td>
+						<td>
+							{% if user_ == "client" %}
+							<input type="button" class="add_to_favourite" value="Add to favourite">{% endif %}</td>
+					</tr>
+					{% endfor %}
+				</table>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="row">
+				<hr>
+				<div class="col-md-2"></div>
+				<div class="col-md-10">Alex & Andrew &copy; All rights received</div>
+			</div>
+		</div>
+	</div>
+
 </body>
 </html>

@@ -8,40 +8,79 @@
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/order.js' %}"></script>
 <body>
 	<div>{% include 'topmenu.html' %}</div>
-	<div>{% include 'map.html' %}</div>
-	<div>
-		<form id="order_form" action="/get_driver_to_order/" method="post">
-			{% csrf_token %}
-			<div>
-				<p>
-					<input type="checkbox" name="is_coords">Coords</p>
-			</div>
-			<div>
-				<input type="text" name="start" id="start"></div>
-			<div>
-				<input type="text" name="end" id="end"></div>
-			<div>
-				<input type="datetime" name="datetime" placeholder="yyyy-mm-dd hh:mm"></div>
-			<div>
-				<input type="checkbox" name="is_fast">is fast</div>
-			<div>
-				<input type="checkbox" name="conditioner">conditioner</div>
-			<div>
-				<input type="text" name="type_salon">type_salon</div>
-			<div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">{% include 'leftmenu.html' %}</div>
+			<div class="col-md-5">{% include 'map.html' %}</div>
+			<div class="col-md-5">
 				<div>
-					<input type="checkbox" name="place_from_things">place_from_things</div>
-				<div>
-					<div>
-						<input type="text" name="count_places">count_places</div>
-					
-					<input type="hidden" value="" id="driver_name" name="driver_name">
+					<form class="form-horizontal" id="order_form" action="/get_driver_to_order/" method="post">
+						{% csrf_token %}
+						<div class="form-group">
+							<label for="inputCoords" class="col-sm-3 control-label">Coords</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="checkbox" name="is_coords"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputStart" class="col-sm-3 control-label">Start</label>
+							<div class="col-sm-9">
+								<input class="form-control" type="text" name="start" id="start"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputEnd" class="col-sm-3 control-label">End</label>
+							<div class="col-sm-9">
+								<input class="form-control" type="text" name="end" id="end"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputDatetime" class="col-sm-3 control-label">Time</label>
+							<div class="col-sm-9">
+								<input class="form-control" type="datetime" name="datetime" placeholder="yyyy-mm-dd hh:mm"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputCoords" class="col-sm-3 control-label">Is fast</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="checkbox" name="is_fast"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputCoords" class="col-sm-3 control-label">Conditioner</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="checkbox" name="conditioner"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputCoords" class="col-sm-3 control-label">Type of salon</label>
+							<div class="col-sm-9">
+								<input class="form-control" type="text" name="type_salon"></div>
+						</div>
+						<div class="form-group">
+							<label for="inputCoords" class="col-sm-3 control-label">Place for stuff</label>
+							<div class="col-sm-2">
+								<input class="form-control" type="checkbox" name="place_from_things"></div>
+						</div>
+						<div>
+							<div class="form-group">
+								<label for="inputCoords" class="col-sm-3 control-label">Count of Passagers</label>
+								<div class="col-sm-9">
+									<input class="form-control" type="text" name="count_places"></div>
+							</div>
 
-					<div>
-						<input id="create_order" type="submit" value="Send"></div>
-				</form>
+							<input type="hidden" value="" id="driver_name" name="driver_name">
+
+							<div class="col-md-3">
+								<button id="create_order" type="submit" class="btn btn-primary btn-block">Send</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="row">
+				<hr>
+				<div class="col-md-2"></div>
+				<div class="col-md-10">Alex & Andrew &copy; All rights received</div>
 			</div>
 		</div>
 	</div>
+
 </body>
 </html>

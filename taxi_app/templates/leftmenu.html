@@ -1,0 +1,28 @@
+{% load staticfiles %}
+<!--<p class="lead">Shop Name</p>-->
+<div class="list-group">
+	{% if user2.is_authorized %}
+          {% if user2.photo %}
+	<a href = '/order/' class="list-group-item">Create order</a>
+	{% else %}
+	<a href = '/driver_order/' class="list-group-item">Get order</a>
+	{% endif %}
+	<a href='/history/' class="list-group-item">History</a>
+	<a href='/rating/' class="list-group-item">Rating</a>
+	{% if user2.photo %}
+	<a href="/favourite_drivers/" class="list-group-item">Favourite drivers</a>
+	{% endif %}
+{% if not user2.photo %}
+<input type="hidden" id="driver" value="{{ driver }}">
+<div id="state">
+	<p>
+		You is now in state 
+        {% if user2.state == 2 %} <b>offline</b>
+		{% else %} <b>online</b>
+		{% endif %}
+	</p>
+	<button id="change_state">Change state</button>
+</div>
+{% endif %}
+      {% endif %}
+</div>
