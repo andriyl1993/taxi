@@ -15,13 +15,11 @@
 {% if not user2.photo %}
 <input type="hidden" id="driver" value="{{ driver }}">
 <div id="state">
-	<p>
-		You is now in state 
-        {% if user2.state == 2 %} <b>offline</b>
-		{% else %} <b>online</b>
+        {% if user2.state == 2 %} 
+        <button id="change_state" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-remove-circle" aria-hidden="true"></span> <b>offline</b></button>
+		{% else %}
+		<button id="change_state" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> <b>online</b></button>
 		{% endif %}
-	</p>
-	<button id="change_state">Change state</button>
 </div>
 {% endif %}
       {% endif %}
