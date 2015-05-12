@@ -18,17 +18,16 @@ $(function() {
 
 $(function() {
 	my_orders = [];
-	setTimeout(console.log("pause"), 4000);
+	setTimeout(function() {}, 4000);
 	setInterval(function(){
 		cords = my_place();
-		console.log(cords); 
 		$.ajax({
 			url:"/post_my_position_in_interval/",
 			type: "POST",
 			data: getToken() + "&x=" + cords[0] + "&y=" + cords[1],
 			cached: false,
 		});
-	}, 60000);
+	}, 20000);
 });
 
 var my_orders;

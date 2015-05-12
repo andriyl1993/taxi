@@ -14,6 +14,7 @@ from collections import defaultdict
 import simplejson
 
 from django.views.generic import TemplateView
+import yaml
 
 
 driver_state = ['online','has order','offline']
@@ -286,6 +287,7 @@ def get_driver_to_order(request):
 
 def return_driver_data_result(request):
 	try:
+		print request.POST
 		data = request.POST.get('data')
 		print data
 		elems = data[1:-1].split('},{')
