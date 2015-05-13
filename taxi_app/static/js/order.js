@@ -58,3 +58,14 @@ $(function() {
 		}, 1000);
 	});
 });
+
+$(function() {
+	timeout = setTimeout(function() {
+		if ($("#start").val() != "" && $("#end").val() != "") {
+			$("#order_form").append("<input type='hidden' name='distance' value=''>");
+			$("#order_form").append("<input type='hidden' name='duration' value=''>");
+			create_way_from_names_of_places();
+		}
+		clearTimeout(timeout);
+	}, 3000); 
+});
