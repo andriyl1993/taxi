@@ -67,5 +67,42 @@ $(function() {
 			create_way_from_names_of_places();
 		}
 		clearTimeout(timeout);
-	}, 3000); 
+	}, 2000); 
+});
+
+$(function() {
+	$("#create_order").click(function() { 
+		var except = false;
+		if ($("input[name='start']").val() == "") { 
+			$("input[name='start']").addClass("red-border");
+			except = true;
+		}
+		else { 
+			$("input[name='start']").removeClass("red-border");
+		}
+		if ($("input[name='end']").val() == "") { 
+			$("input[name='end']").addClass("red-border");
+			except = true;
+		}
+		else { 
+			$("input[name='end']").removeClass("red-border");
+		}
+		if ($("input[type='date']").val() == "") { 
+			$("input[type='date']").addClass("red-border");
+			except = true;
+		}
+		else { 
+			$("input[type='date']").removeClass("red-border");
+		}
+		if ($("input[type='time']").val() == "") {
+			$("input[type='time']").addClass("red-border");
+			except = true;
+		}
+		else { 
+			$("input[type='time']").removeClass("red-border");
+		}
+		if (except == true) {
+			return false; 
+		}
+	});
 });

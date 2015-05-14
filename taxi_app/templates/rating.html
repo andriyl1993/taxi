@@ -15,13 +15,27 @@
 		<tr>
 			<th>Driver</th>
 			<th>Client</th>
-			<th>Mark</th>
+			{% if user_type == "driver" %}
+				<th>Mark - car_state</th>
+				<th>Mark - order_execution</th>
+				<th>Mark - comfort</th>
+				<th>Mark - avarage_value</th>
+			{% else %}
+				<th>Mark</th>
+			{% endif %}
 	   </tr>
 		{% for r in ratings %}
 			<tr> 
 				<td>{{ r.driver.user}}</td>
-				<td>{{ r.cient.client_user }}</td>
-				<td>{{ r.value }}</td>
+				<td>{{ r.client.client_user }}</td>
+				{% if user_type == "client" %}
+					<td>{{ r.value }}</td>
+				{% else %}
+					<td>{{ r.car_state }}</td>
+					<td>{{ r.order_execution }}</td>
+					<td>{{ r.comfort }}</td>
+					<td>{{ r.avarage_value }}</td>
+				{% endif %}
 			</tr>
 		{% endfor %}
 	</table>
