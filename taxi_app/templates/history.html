@@ -33,11 +33,11 @@
 					{% for r in result %}
 					<tr>
 						<td>
-							{% if user == "client" %}
-						{{ r.0.driver.user }}
-					{% else %}
-						{{ r.0.client.client_user }}
-					{% endif %}
+							{% if user_ == "client" %}
+								{{ r.0.driver.user }}
+							{% else %}
+								{{ r.0.client.client_user }}
+							{% endif %}
 						</td>
 						<td>{{ r.0.cost }}</td>
 						<td>{{ r.0.date }}</td>

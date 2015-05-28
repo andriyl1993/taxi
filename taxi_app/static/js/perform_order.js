@@ -47,6 +47,7 @@ $(function() {
 		}
 	}, 5000);
 	setTimeout(function() {
+		console.log(res);
 		$.ajax({
 			url: "/return_driver_data_result/",
 			type: "POST",

@@ -7,16 +7,19 @@ from models import *
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, redirect
-import datetime
+from datetime import datetime
 import json
 from forms import ImageForm
 from collections import defaultdict
 import simplejson
 
 from django.views.generic import TemplateView
+import yaml
 
 
 driver_state = ['online','has order','offline']
+type_salon = {"any": "0", "cheap": "1", "business": "2", "jeep": "3"}
+
 
 def index(request):
 	try:
@@ -182,13 +185,23 @@ def post_my_position_in_interval(request):
 			return HttpResponse(str(e))
 	return HttpResponse('ok')
 
+import time as _time
+from time import mktime
 
 #client_coords
 def get_driver_to_order(request):
 	#order
 	order = Order()
-	order.date = request.POST['datetime']
+	#order.date = request.POST['datetime']
 	
+	date = request.POST.get('date')
+	time_order = request.POST.get('time')
+
+	date = datetime.fromtimestamp(mktime(_time.strptime(date + " " + time_order, "%Y-%m-%d %H:%M")))
+	order.date = date
+	print date
+	print type(date)
+
 	loc_start = Location()
 	loc_start.x = request.POST.get('x_start')
 	loc_start.y = request.POST.get('y_start')
@@ -235,8 +248,9 @@ def get_driver_to_order(request):
 		ads.conditioner = request.POST.get('conditioner')
 	else:
 		ads.conditioner = False	
-	if request.POST.get('type_salon') != "":
-		ads.type_salon = int(request.POST.get('type_salon'))
+	if request.POST.get('type_salon') != "any":
+		print request.POST.get('type_salon')
+		ads.type_salon = int(type_salon[request.POST.get('type_salon')])
 	else:
 		ads.type_salon = 0
 	if request.POST.get('place_from_things') != None:
@@ -244,7 +258,7 @@ def get_driver_to_order(request):
 	else:
 		ads.place_from_things = False
 	if request.POST.get('count_places') != "":
-		ads.count_places = request.POST.get('count_places')
+		ads.count_places = int(request.POST.get('count_places'))
 	else:	
 		ads.count_places = 0
 	
@@ -286,6 +300,7 @@ def get_driver_to_order(request):
 
 def return_driver_data_result(request):
 	try:
+		print request.POST
 		data = request.POST.get('data')
 		print data
 		elems = data[1:-1].split('},{')
@@ -478,19 +493,26 @@ def history(request):
 def rating(request):
 	if request.user.is_authenticated():
 		user = request.user
+		user_type = ""
 		us = ClientUser.objects.filter(client_user__username = user)
 		if len(us) < 1:
 			us = DriverUser.objects.filter(user__username = user)
+			user_type = "driver"
 			orders = Order.objects.filter(driver = us)
-			ratings = DriverRating.objects.filter(driver__user = us)
+			ratings = DriverRating.objects.filter(driver = us)
 		else:
 			orders = Order.objects.filter(client = us)
+			user_type = "client"
 			ratings = ClientRating.objects.filter(client__client_user__username = user)
 		count_orders = len(ratings)
 		rating = 0
 		if count_orders > 0:
-			rating = float(sum([r.value for r in ratings])) / float(count_orders)
-		return render(request, "rating.html", {"ratings": ratings, "mark": rating})
+			if user_type == "client":
+				rating = float(sum([r.value for r in ratings])) / float(count_orders)
+			else:
+				rating = float(sum([r.avarage_value for r in ratings])) / float(count_orders)
+		return render(request, "rating.html", {"ratings": ratings, "mark": rating, "user_type": user_type})
+
 	else:
 		return HttpResponse("ERROR")
 	
