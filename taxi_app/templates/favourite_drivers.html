@@ -10,9 +10,10 @@
 <body>
 	{% csrf_token %}
 	<div>{% include 'topmenu.html' %}</div>
-	<table>
+	<table class="table">
 		<tr>
 			<th>Driver</th>
+			<th>Status</th>
 	   </tr>
 		{% for d in fd %}
 			<tr> 
