@@ -10,8 +10,12 @@
 <body>
 	{% csrf_token %}
 	<div>{% include 'topmenu.html' %}</div>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-2">{% include 'leftmenu.html' %}</div>
+			<div class="col-md-10">
 
-	<table>
+	<table class="table">
 		<tr>
 			<th>Driver</th>
 			<th>Client</th>
@@ -39,7 +43,15 @@
 			</tr>
 		{% endfor %}
 	</table>
-	<h4>Result = {{ mark }}</h4>
-	<a href="/">Back</a>
+	<h4>Result = {{ mark }}</h4></div>
+		</div>
+		<div class="footer">
+			<div class="row">
+				<hr>
+				<div class="col-md-2"></div>
+				<div class="col-md-10">Alex & Andrew &copy; All rights received</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
