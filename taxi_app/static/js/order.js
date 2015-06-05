@@ -20,7 +20,8 @@ $(function(){
 			$("#order_form").append("<input type='hidden' name='y_end' value=''>");
 			$("#order_form").append("<input type='hidden' name='distance' value=''>");
 			$("#order_form").append("<input type='hidden' name='duration' value=''>");
-			$("#order_form").append("<input type='button' onclick='click_on_map()' value='остроить точками'>");
+			click_on_map();
+			//$("#order_form").append("<input type='button' onclick='click_on_map()' value='остроить точками'>");
 		}
 		else{
 			$("#order_form input[name='x_start']").remove();
@@ -34,7 +35,7 @@ $(function(){
 	});
 });
 
-$(function(){
+/*$(function(){
 	if(this.checked) {
 		interval = setInterval(function() {
 			if (typeof end[0] !== "undefined"){
@@ -46,6 +47,22 @@ $(function(){
 				create_way_from_points();
 			}},  1000)
 	}
+});*/
+
+$(function() {
+	$("input[name='is_coords']").change(function() {
+		if ($(this).prop("checked") == true) {
+			interval = setInterval(function() {
+			if (typeof end[0] !== "undefined"){
+				$("#order_form input[name='x_start']").attr("value", start[0]);
+				$("#order_form input[name='y_start']").attr("value", start[1]);
+				$("#order_form input[name='x_end']").attr("value", end[0]);
+				$("#order_form input[name='y_end']").attr("value", end[1]);
+				clearInterval(interval);
+				create_way_from_points();
+			}},  1000);
+		}
+	});
 });
 
 $(function() {
@@ -73,14 +90,14 @@ $(function() {
 $(function() {
 	$("#create_order").click(function() { 
 		var except = false;
-		if ($("input[name='start']").val() == "") { 
+		if ($("input[name='start']").val() == "" && $("input[name='is_coords']").prop("checked") != true) { 
 			$("input[name='start']").addClass("red-border");
 			except = true;
 		}
 		else { 
 			$("input[name='start']").removeClass("red-border");
 		}
-		if ($("input[name='end']").val() == "") { 
+		if ($("input[name='end']").val() == "" && $("input[name='is_coords']").prop("checked") != true) { 
 			$("input[name='end']").addClass("red-border");
 			except = true;
 		}

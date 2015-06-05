@@ -56,7 +56,7 @@ function apply_order() {
 							if (res.status == "clear") {
 								$(".order-container").append("<div> Order is clear </div>");
 								window.clearInterval(inter);
-								window.location.href = window.location.hrefж
+								window.location.href = window.location.href;
 							}
 						}
 					}
@@ -72,7 +72,7 @@ function clear_order() {
 		type: "POST",
 		data: getToken() + "&order=" + my_orders[0] + "&result=clear",
 		success: function() {
-			
+			window.location.href = window.location.href;
 		}
 	});
 }
@@ -96,15 +96,31 @@ function add_new_orders(orders) {
 		$(".order-container").append("<div class = 'order" + order.pk + "'></div>")
 		var div_val = '.order' + order.pk
 		$(div_val).append("<h4><label> Order " + "</label></h4>");
-		$(div_val).append("<label class='client'>" + order.client+ "</label><br>");
-		$(div_val).append("<label class='date'>" + order.date + "</label><br>");
-		$(div_val).append("<label class='is_fast'>" + order.is_fast+ "</label><br>");
-		$(div_val).append("<label class='long_travel'>" + order.long_travel+ "</label><br>");
-		$(div_val).append("<label class='time_travel'>" + order.time_travel+ "</label><br>");
-		$(div_val).append("<label class='cost'>" + order.cost+ "</label><br>");
+		$(div_val).append("<label class='client'>" + "Client - "  + order.client + "</label><br>");
+		$(div_val).append("<p><input type='button' value='Client infa' onclick='user_infa()'></p>");
+		$(div_val).append("<label class='date'>Date - " + order.date + "</label><br>");
+		$(div_val).append("<label class='is_fast'>Is fast - " + order.is_fast+ "</label><br>");
+		$(div_val).append("<label class='long_travel'>Long travel - " + order.long_travel+ "</label><br>");
+		$(div_val).append("<label class='time_travel'>Time travel - " + order.time_travel+ "</label><br>");
+		$(div_val).append("<label class='cost'>Cost - " + order.cost+ "</label><br>");
 		$(div_val).append("<input type='button' id='add_order' class='add_order' value='Прийняти' onclick='apply_order()'></input><br>");
 		$(div_val).append("<input type='button' class='clear_order' value='Відхилити' onclick='clear_order()'></input><br>");
 
 		my_orders.push(order.pk);
 	}
+}
+
+user_infa = function() {
+	$.ajax({
+		url: '/profile_to_json/',
+		type: 'POST',
+		data: getToken() + '&type_user=client&username=' + order.client,
+		success: function(res) {
+			res = JSON.parse(res);
+			$(".user-infa").append("<p>User - " + res.username + "</p>");
+			$(".user-infa").append("<p>Rating - " + res.rating + "</p>");
+			$(".user-infa").append("<p>Date registration - " + res.date_registration + "</p>");
+		}
+	});
+	//$(".user-infa").append("<p>User - " + order.client);
 }
