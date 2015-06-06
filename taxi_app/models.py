@@ -125,7 +125,7 @@ class Order(models.Model):
 	driver_rating = models.OneToOneField(DriverRating, blank=True, null=True)
 	state = models.IntegerField()
 	time_travel = models.IntegerField()
-	long_travel = models.IntegerField()
+	long_travel = models.FloatField()
 	is_fast = models.BooleanField(default = True)
 	driver = models.ForeignKey(DriverUser, blank = True, null=True)
 	client = models.ForeignKey(ClientUser)

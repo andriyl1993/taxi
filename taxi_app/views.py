@@ -191,112 +191,121 @@ from time import mktime
 #client_coords
 def get_driver_to_order(request):
 	#order
-	order = Order()
-	#order.date = request.POST['datetime']
-	
-	date = request.POST.get('date')
-	time_order = request.POST.get('time')
+	try:
+		order = Order()
+		#order.date = request.POST['datetime']
+		
+		date = request.POST.get('date')
+		time_order = request.POST.get('time')
 
-	date = datetime.fromtimestamp(mktime(_time.strptime(date + " " + time_order, "%Y-%m-%d %H:%M")))
-	order.date = date
-	print date
-	print type(date)
+		date = datetime.fromtimestamp(mktime(_time.strptime(date + " " + time_order, "%Y-%m-%d %H:%M")))
+		order.date = date
 
-	loc_start = Location()
-	loc_start.x = request.POST.get('x_start')
-	loc_start.y = request.POST.get('y_start')
-	address = request.POST.get('start').split(',')
-	loc_start.city = address[0]
-	loc_start.street = address[1]
-	if len(address) > 2:
-		loc_start.building = int(address[2])
-	loc_start.save()
-	order.start_location = loc_start
-	loc_end = Location()
-	loc_end.x = request.POST.get('x_end')
-	loc_end.y = request.POST.get('y_end')
-	address = request.POST.get('end').split(',')
-	loc_end.city = address[0]
-	loc_end.street = address[1]
-	if len(address) > 2:
-		loc_end.building = int(address[2])
-	loc_end.save()
-	order.end_location = loc_end
+		loc_start = Location()
+		loc_start.x = request.POST.get('x_start')
+		loc_start.y = request.POST.get('y_start')
+		print loc_start.x
+		address = request.POST.get('start').split(',')
+		if loc_start.x == None:
+			loc_start.city = address[0]
+			loc_start.street = address[1]
+			print loc_start.street
+			if len(address) > 2:
+				loc_start.building = int(address[2])
+		loc_start.save()
+		order.start_location = loc_start
+		loc_end = Location()
+		loc_end.x = request.POST.get('x_end')
+		loc_end.y = request.POST.get('y_end')
+		if loc_end.x == None:
+			address = request.POST.get('end').split(',')
+			loc_end.city = address[0]
+			loc_end.street = address[1]
+			if len(address) > 2:
+				loc_end.building = int(address[2])
+		loc_end.save()
+		order.end_location = loc_end
 
-	order.state = 0
+		order.state = 0
 
-	time = request.POST.get('duration')
-	time = time.split(' ')
-	if len(time) > 1:
-		hour = int(time[0])
-		minutes = int(time[1])
-		order.time_travel = hour * 60 + minutes
-	else:
-		minutes = int(time[0])
-		order.time_travel = minutes
-	order.long_travel = request.POST.get('distance')
+		time = request.POST.get('duration')
+		time = time.split(' ')
+		try:
+			if len(time) > 1:
+				hour = int(time[0])
+				minutes = int(time[1])
+				order.time_travel = hour * 60 + minutes
+			else:
+				minutes = int(time[0])
+				order.time_travel = minutes
+			#long_travel = int(request.POST.get('distance'))
+			long_travel = request.POST.get('distance').replace(',', '.')
+			order.long_travel = float(long_travel)
+			#print order.long_travel
+		except Exception, e:
+			print "Error" + str(e)
+		if request.POST.get('is_fast') != None:
+			order.is_fast = True
+		else:
+			order.is_fast = False
+		order.client = ClientUser.objects.get(client_user = request.user)
+		
+		driver_name = request.POST.get('driver_name')
+		ads = AddService()
+		if request.POST.get('conditioner') != None:
+			ads.conditioner = request.POST.get('conditioner')
+		else:
+			ads.conditioner = False	
+		if request.POST.get('type_salon') != "any":
+			ads.type_salon = int(type_salon[request.POST.get('type_salon')])
+		else:
+			ads.type_salon = 0
+		if request.POST.get('place_from_things') != None:
+			ads.place_from_things = request.POST.get('place_from_things')
+		else:
+			ads.place_from_things = False
+		if request.POST.get('count_places') != "":
+			ads.count_places = int(request.POST.get('count_places'))
+		else:	
+			ads.count_places = 0
+		
+		ads.save()
+		order.add_service = ads
+		if driver_name != "":
+			driver = DriverUser.objects.filter(user__username = driver_name)
+			order.driver = driver[0]
+		#print "----------------------------------------++++++++++++++++++++++++++++++++++++++++"
+		#print order.to_json()
+		order.save()
+		
+		alldu = DriverUser.objects.all()
 
-	if request.POST.get('is_fast') != None:
-		order.is_fast = True
-	else:
-		order.is_fast = False
-	order.client = ClientUser.objects.get(client_user = request.user)
-	
-	driver_name = request.POST.get('driver_name')
-	ads = AddService()
-	if request.POST.get('conditioner') != None:
-		ads.conditioner = request.POST.get('conditioner')
-	else:
-		ads.conditioner = False	
-	if request.POST.get('type_salon') != "any":
-		print request.POST.get('type_salon')
-		ads.type_salon = int(type_salon[request.POST.get('type_salon')])
-	else:
-		ads.type_salon = 0
-	if request.POST.get('place_from_things') != None:
-		ads.place_from_things = request.POST.get('place_from_things')
-	else:
-		ads.place_from_things = False
-	if request.POST.get('count_places') != "":
-		ads.count_places = int(request.POST.get('count_places'))
-	else:	
-		ads.count_places = 0
-	
-	ads.save()
-	order.add_service = ads
-	if driver_name != "":
-		driver = DriverUser.objects.filter(user__username = driver_name)
-		order.driver = driver[0]
-	order.save()
+		#filter(location__x__gte = order.start_location.x - 0.1).filter(location__x__lte = order.start_location.x + 0.1).filter(location__y__gte = order.start_location.y - 0.1).filter(location__y__lte = order.start_location.y + 0.1)
+		drivers = DriverUser.objects.filter(state = 0)
+		if ads.conditioner == True:
+			drivers = drivers.filter(add_service__conditioner = True)
+		if ads.type_salon != 0:
+			drivers = drivers.filter(add_service__type_salon = ads.type_salon)
+		if ads.place_from_things == True:
+			drivers = drivers.filter(add_service__place_from_things = True)
+		if ads.count_places != 0:
+			drivers = drivers.filter(add_service__count_places__gte = ads.count_places)
+		############################################
 
-	alldu = DriverUser.objects.all()
+		js_order = json.dumps(order.to_json())
+		
+		if driver_name == "":
+			json_drivers = query_to_json(drivers)
+			print json_drivers
+		else:
+			drivers = []
+			drivers.append(order.driver)
+			json_drivers = query_to_json(drivers)
+			print json_drivers
 
-	#filter(location__x__gte = order.start_location.x - 0.1).filter(location__x__lte = order.start_location.x + 0.1).filter(location__y__gte = order.start_location.y - 0.1).filter(location__y__lte = order.start_location.y + 0.1)
-	drivers = DriverUser.objects.filter(state = 0)
-
-	if ads.conditioner == True:
-		drivers = drivers.filter(add_service__conditioner = True)
-	if ads.type_salon != 0:
-		drivers = drivers.filter(add_service__type_salon = ads.type_salon)
-	if ads.place_from_things == True:
-		drivers = drivers.filter(add_service__place_from_things = True)
-	if ads.count_places != 0:
-		drivers = drivers.filter(add_service__count_places__gte = ads.count_places)
-	############################################
-
-	js_order = json.dumps(order.to_json())
-	
-	if driver_name == "":
-		json_drivers = query_to_json(drivers)
-		print json_drivers
-	else:
-		drivers = []
-		drivers.append(order.driver)
-		json_drivers = query_to_json(drivers)
-		print json_drivers
-
-	return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
-
+		return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
+	except Exception, e:
+		print str(e)
 
 def return_driver_data_result(request):
 	try:
@@ -607,3 +616,12 @@ def change_client_data(request):
 		client.photo.docfile = request.POST.get('photo')
 		client.save()
 	return redirect('/client_profile/')
+
+def profile_to_json(request):
+	user = request.POST.get('username')
+	if request.POST.get('type_user') == 'driver':
+		user = DriverUser.objects.get(user__username = user)
+	else:
+		user = ClientUser.objects.get(client_user__username = user)
+
+	return HttpResponse(json.dumps(user.to_json()))

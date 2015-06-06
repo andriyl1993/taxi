@@ -78,15 +78,19 @@ $(function() {
       data: getToken(),
       success: function(res) {
         res = JSON.parse(res);
-        console.log(res);
-        if (res.status == "apply" || res.status == "ok") {
-          $("#state").text(res.status);
+        $("#cost").text("Cost of travel - " + res.cost);
+        $("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
 
+        if (res.status == "apply" || res.status == "ok") {
+          console.log("apply");
+          $("#state").text(res.status);
           $(".send").css("display", "inline");
+          $("#cost").append("<p>Cost of travel - " + res.cost + "</p>");
+          $("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
+
           window.clearInterval(interv);
         } else if (res.status == "clear") {
           $("#state").text(res.status);
-          $("#cost").text(res.cost);
           console.log('clear');
           window.clearInterval(interv);
         } else {
@@ -96,3 +100,18 @@ $(function() {
     });
   }, 20000);
 });
+
+driver_infa = function() {
+  $.ajax({
+    url: '/profile_to_json/',
+    type: 'POST',
+    data: getToken() + '&type_user=driver&username=' + order.client,
+    success: function(res) {
+      res = JSON.parse(res);
+      console.log(res);
+      $(".user-infa").append("<p>Driver - " + res.username + "</p>");
+      $(".user-infa").append("<p>Rating - " + res.rating + "</p>");
+      $(".user-infa").append("<p>Date registration - " + res.date_registration + "</p>");
+    }
+  });
+}
