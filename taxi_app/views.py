@@ -23,7 +23,6 @@ type_salon = {"any": "0", "cheap": "1", "business": "2", "jeep": "3"}
 
 def index(request):
 	try:
-		print request.user 
 		if request.user.is_authenticated():
 		 	user2 = ClientUser.objects.filter(client_user = request.user)
 			if not user2:
@@ -204,12 +203,10 @@ def get_driver_to_order(request):
 		loc_start = Location()
 		loc_start.x = request.POST.get('x_start')
 		loc_start.y = request.POST.get('y_start')
-		print loc_start.x
 		address = request.POST.get('start').split(',')
 		if loc_start.x == None:
 			loc_start.city = address[0]
 			loc_start.street = address[1]
-			print loc_start.street
 			if len(address) > 2:
 				loc_start.building = int(address[2])
 		loc_start.save()
@@ -296,22 +293,18 @@ def get_driver_to_order(request):
 		
 		if driver_name == "":
 			json_drivers = query_to_json(drivers)
-			print json_drivers
 		else:
 			drivers = []
 			drivers.append(order.driver)
 			json_drivers = query_to_json(drivers)
-			print json_drivers
-
+			
 		return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
 	except Exception, e:
 		print str(e)
 
 def return_driver_data_result(request):
 	try:
-		print request.POST
 		data = request.POST.get('data')
-		print data
 		elems = data[1:-1].split('},{')
 		i = 0
 		results = []
@@ -334,12 +327,13 @@ def return_driver_data_result(request):
 		lengths = []
 		for r in results:
 			try:
-				print results
+				#print results
 				driver = DriverUser.objects.get(user__username = r['username'])
-				cost = driver.rate_km_city * float(r['distance'].replace(',', '.')) + float(r['distance_to_client'].replace(',', '.')) * driver.rate_without_client
+				cost = driver.rate_km_city * float(r['distance']) + float(r['distance_to_client'].replace(',', '.')) * driver.rate_without_client
 				if cost < driver.rate_min:
 					cost = driver.rate_min
 				order = Order.objects.get(pk = r['order_pk'])
+				order.cost = cost
 				drivers.append(r['username'])
 				costs.append(cost)
 				order.order_drivers += r['username'] + ","
@@ -433,10 +427,11 @@ def get_result_from_driver(request):
 	try:
 		client = ClientUser.objects.get(client_user__username = request.user)
 		order = Order.objects.filter(client = client).last()
-		print"order.pk=" + str(order.pk)
-		print "order.state = " + str(order.state)
+		print order.to_json()
+		#print"order.pk=" + str(order.pk)
+		#print "order.state = " + str(order.state)
 		if order.state == 0:
-			return HttpResponse(json.dumps({'status': 'wait'}))
+			return HttpResponse(json.dumps({'status': 'wait', 'order': order.to_json()}))
 		elif order.state == 1:
 			return HttpResponse(json.dumps({'status': 'apply', 'cost': order.cost}))
 		elif order.state == 2:
@@ -445,8 +440,7 @@ def get_result_from_driver(request):
 			return HttpResponse(json.dumps({'status': '3'}))
 		else:
 			print "error"
-			print order.state
-		
+			
 	except Exception, e:
 		print str(e)
 
@@ -455,8 +449,6 @@ def apply(request):
 		res = request.POST.get('res')
 		client = request.user
 		order = Order.objects.filter(client__client_user__username = client).last()
-		print res
-		print order
 		if res == 'ok':
 			order.state = 3
 		else:
@@ -478,7 +470,6 @@ states = {
 def history(request):
 	if request.user.is_authenticated():
 		user = request.user
-		print user
 		client_or_driver = ""
 		us = ClientUser.objects.filter(client_user__username = user)
 		if len(us) < 1:

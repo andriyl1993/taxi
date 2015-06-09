@@ -145,7 +145,7 @@ class Order(models.Model):
 			"state": self.state,
 			"time_travel": self.time_travel,
 			"long_travel": self.long_travel,
-			"is_fast": self.long_travel,
+			"is_fast": self.is_fast,
 			"client": self.client.client_user.username,
 			"add_service": self.add_service.to_json(),
 			"order_drivers": self.order_drivers,

@@ -58,8 +58,13 @@ $(function() {
 				$("#order_form input[name='y_start']").attr("value", start[1]);
 				$("#order_form input[name='x_end']").attr("value", end[0]);
 				$("#order_form input[name='y_end']").attr("value", end[1]);
-				clearInterval(interval);
-				create_way_from_points();
+				try {
+					clearInterval(interval);
+					create_way_from_points();
+				}
+				catch(e) {
+					console.log(e);
+				}
 			}},  1000);
 		}
 	});

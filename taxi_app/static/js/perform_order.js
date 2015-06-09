@@ -6,8 +6,6 @@ function getToken() {
 $(function() {
 	order = JSON.parse($("#order_json").attr("value"));
 	drivers = JSON.parse($("#drivers_json").attr("value"));
-	console.log(drivers);
-	console.log(order);
 	var res = []
 	if (order.start_location.x == null){
 		start = order.start_location.city + " " + order.start_location.street + " " + order.start_location.building
@@ -17,7 +15,6 @@ $(function() {
 	}
 	var i = 0
 	setTimeout( function() {
-		console.log(drivers.length);
 		for (i = 0; i < drivers.length; i++) {
 			$("body").append("<div id='viewContainer' style='display:none;'></div>");
 			end = [drivers[i].x, drivers[i].y]
@@ -30,9 +27,6 @@ $(function() {
 				data = return_data_route();
 				$("#viewContainer").remove(); 
 				inf = {};
-				console.log(data);
-				console.log(this.drivers[res.length]);
-				console.log(this.drivers[res.length].username);
 				obj = Object();
 				obj.distance_to_client = data['distance'];
 				obj.duration_to_client = data['duration'];
@@ -47,7 +41,6 @@ $(function() {
 		}
 	}, 5000);
 	setTimeout(function() {
-		console.log(res);
 		$.ajax({
 			url: "/return_driver_data_result/",
 			type: "POST",
@@ -77,14 +70,15 @@ $(function() {
 			data: getToken(),
 			success: function(res) {
 				res = JSON.parse(res);
+				console.log("/get_result_from_driver/");
+				console.log(res);
 				$("#cost").text("Cost of travel - " + res.cost);
 				$("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
-					
+				console.log(res.status);	
 				if (res.status == "apply" || res.status == "ok") {
-					console.log("apply");
 					$("#state").text(res.status);
 					$(".send").css("display", "inline");
-					$("#cost").append("<p>Cost of travel - " + res.cost + "</p>");
+					$("#cost").append("<p>Cost of travel - " + res.order.cost + "</p>");
 					$("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
 				
 					window.clearInterval(interv);
