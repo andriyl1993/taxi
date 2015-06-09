@@ -102,7 +102,7 @@ class Migration(migrations.Migration):
                 ('cost', models.FloatField(null=True, blank=True)),
                 ('state', models.IntegerField()),
                 ('time_travel', models.IntegerField()),
-                ('long_travel', models.IntegerField()),
+                ('long_travel', models.FloatField()),
                 ('is_fast', models.BooleanField(default=True)),
                 ('order_drivers', models.CharField(default=b'', max_length=1024)),
                 ('order_lengths', models.CharField(default=b'', max_length=1024)),

@@ -14,22 +14,22 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li>
-          <a href="/">Home</a>
+          <a href="/">Головна сторінка</a>
         </li>
         <li>
-          <a href="#">About Us</a>
+          <a href="#">Про нас</a>
         </li>
         <li>
-          <a href="#">Contacts</a>
+          <a href="#">Контакти</a>
         </li>
       </ul>
       {% if user.is_authenticated %}
       <form action="/logout/" method="post">
         {% csrf_token %}
         <div class="navbar-form navbar-right" role="search">
-          <span style="color: white;">Hello, {{ user.username }}</span>
+          <span style="color: white;">Привіт, {{ user.username }}</span>
           <a href='/logout/'>
-            <button class="btn btn-default">Sign Out</button>
+            <button class="btn btn-default">Вийти</button>
           </a>
         </div>
       </form>
@@ -38,15 +38,15 @@
         {% csrf_token %}
         <ul class="nav navbar-nav navbar-right">
           <li>
-            <a href="sign_up">Sigh up</a>
+            <a href="sign_up">Реєстрація</a>
           </li>
         </ul>
         <div class="navbar-form navbar-right">
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="Login" id="logging_username" name="username"/>
-            <input type="password" class="form-control" placeholder="Password" id="logging_password" name="password"/>
+            <input type="text" class="form-control" placeholder="Логін" id="logging_username" name="username"/>
+            <input type="password" class="form-control" placeholder="Пароль" id="logging_password" name="password"/>
           </div>
-          <button type="submit" class="btn btn-default" id="sign_in">Sign in</button>
+          <button type="submit" class="btn btn-default" id="sign_in">Увійти</button>
         </div>
       </form>
       {% endif %}
