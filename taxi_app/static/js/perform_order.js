@@ -65,7 +65,6 @@ $(function() {
 });
 
 $(function() {
-<<<<<<< HEAD
 	interv = setInterval(function() {
 		$.ajax({
 			url: "/get_result_from_driver/",
@@ -97,36 +96,6 @@ $(function() {
 			},
 		});
 	}, 20000);
-=======
-  interv = setInterval(function() {
-    $.ajax({
-      url: "/get_result_from_driver/",
-      type: "POST",
-      data: getToken(),
-      success: function(res) {
-        res = JSON.parse(res);
-        $("#cost").text("Cost of travel - " + res.cost);
-        $("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
-
-        if (res.status == "apply" || res.status == "ok") {
-          console.log("apply");
-          $("#state").text(res.status);
-          $(".send").css("display", "inline");
-          $("#cost").append("<p>Cost of travel - " + res.cost + "</p>");
-          $("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
-
-          window.clearInterval(interv);
-        } else if (res.status == "clear") {
-          $("#state").text(res.status);
-          console.log('clear');
-          window.clearInterval(interv);
-        } else {
-          $("#state").text(res.status);
-        }
-      },
-    });
-  }, 20000);
->>>>>>> 7cc38d13f93cdae0dfc1cd4606183d1de27727e4
 });
 
 driver_infa = function() {
