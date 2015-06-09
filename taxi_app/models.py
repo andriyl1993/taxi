@@ -71,6 +71,8 @@ class DriverUser(models.Model):
 			"username": self.user.username,
 			"x": self.location.x,
 			"y": self.location.y,
+			"rating": self.rating,
+			"date_registration": str(self.date_registration),
 		}
 
 

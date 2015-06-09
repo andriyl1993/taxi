@@ -30,38 +30,6 @@
 						<th>Рейтинг</th>
 						<th></th>
 					</tr>
-					<tr>
-						{% if user_ == "client" %}
-						<th>driver1</th>
-						{% else %}
-						<th>alex1</th>
-						{% endif %}
-						<th>40</th>
-						<th>12.05.2015</th>
-						<th>київ,ковальський,5</th>
-						<th>київ,хрещатик,5</th>
-						<th>14хв</th>
-						<th>7.5км</th>
-						<th>Виконано</th>
-						<th>5</th>
-						<th></th>
-					</tr>
-					<tr>
-						{% if user_ == "client" %}
-						<th>driver1</th>
-						{% else %}
-						<th>alex1</th>
-						{% endif %}
-						<th>45</th>
-						<th>18.05.2015</th>
-						<th>київ,хрещатик,10</th>
-						<th>київ,пр.Перемоги, 11</th>
-						<th>20хв</th>
-						<th>8.5км</th>
-						<th>Виконується</th>
-						<th>4</th>
-						<th></th>
-					</tr>
 					{% for r in result %}
 					<tr>
 						<td>
@@ -104,12 +72,19 @@
 						</td>
 						<td>
 							{% if user_ == "client" %}
-							<input type="button" class="add_to_favourite" value="Add to favourite">{% endif %}</td>
+							<input type="button" class="add_to_favourite btn-success" value="Add to favourite">{% endif %}</td>
 					</tr>
 					{% endfor %}
 				</table>
 			</div>
+		
+	</div>
+		<a href="/" style="text-decoration: none;   color: black; margin-top: 9px;left: 281px; vertical-align: middle;">
+			<span class="glyphicon" style="text-decoration: none; color: black; margin-top: 9px;left: 281px; vertical-align: middle;" aria-hidden="true">Повернутися</span>
+		</a>
+		
 		</div>
+
 		<div class="footer">
 			<div class="row">
 				<hr>
@@ -117,7 +92,6 @@
 				<div class="col-md-10">Олександр Ничепорук & Андрій Лецик &copy; Всі права захищено</div>
 			</div>
 		</div>
-	</div>
 
 </body>
 </html>

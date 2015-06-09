@@ -15,7 +15,7 @@
 			<div class="col-md-2">{% include 'leftmenu.html' %}</div>
 			<div class="col-md-10">
 
-	<table class="table">
+	<table class="table table-bordered">
 		<tr>
 			<th>Водій</th>
 			<th>Клієнт</th>
@@ -23,7 +23,7 @@
 				<th>Стан авто</th>
 				<th>Якість виконання замовлення</th>
 				<th>Комфорт</th>
-			0	<th>Середнє значення</th>
+				<th>Середнє значення</th>
 			{% else %}
 				<th>Оцінити</th>
 			{% endif %}
@@ -43,8 +43,13 @@
 			</tr>
 		{% endfor %}
 	</table>
-	<h4>Результат = {{ mark }}</h4></div>
+	<h4>Результат = {{ mark }}</h4>
+	
+	</div>
 		</div>
+		<a href="/" style="text-decoration: none;   color: black; margin-top: 9px;left: 281px; vertical-align: middle;">
+			<span class="glyphicon" style="text-decoration: none; color: black; margin-top: 9px;left: 281px; vertical-align: middle;" aria-hidden="true">Повернутися</span>
+		</a>
 		<div class="footer">
 			<div class="row">
 				<hr>

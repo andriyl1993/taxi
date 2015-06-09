@@ -33,19 +33,19 @@ $(function() {
 
 $(function() {
   $(".mark").click(function() {
-    console.log($(this).parents("table").find("tr th")[0].innerHTML);
-    if ($(this).parents("table").find("tr th")[0].innerHTML == "Driver") {
-      $(this).parents("tr").append("<input type='text' class='car_state'>");
-      $(this).parents("tr").append("<input type='text' class='order_execution'>");
-      $(this).parents("tr").append("<input type='text' class='comfort'>");
-      $(this).parents("tr").append("<input type='button' class='post_rating' value='save'>");
+    console.log($(this).parents("table").find("tr th")[0]);
+    if ($(this).parents("table").find("tr th")[0].innerHTML == "Водій") {
+      $(this).parents("tr").append("<input type='text' class='car_state' style='width:80px;' placeholder='Стан авто'>");
+      $(this).parents("tr").append("<input type='text' class='order_execution' style='width:80px;' placeholder='Виконання замовлення'>");
+      $(this).parents("tr").append("<input type='text' class='comfort' style='width:80px;' placeholder='Комфорт'>");
+      $(this).parents("tr").append("<input type='button' class='post_rating' value='save' style='background-color: greenyellow;'>");
     } else {
-      $(this).parents("tr").append("<input type='text' class='value'>");
-      $(this).parents("tr").append("<input type='button' class='post_rating' value='save'>");
+      $(this).parents("tr").append("<input type='text' class='value' style='width:80px;'>");
+      $(this).parents("tr").append("<input type='button' class='post_rating' value='save'  style='background-color: greenyellow;'>");
     }
 
     $(".post_rating").click(function() {
-      if ($(this).parents("table").find("tr th")[0].innerHTML == "Driver") {
+      if ($(this).parents("table").find("tr th")[0].innerHTML == "Водій") {
         var car_state = $(this).parents("tr").find(".car_state")[0].value;
         if (!$.isNumeric(car_state) || parseInt(car_state) > 5 || parseInt(car_state) < 0)
           return false;

@@ -246,15 +246,14 @@ def get_driver_to_order(request):
 		else:
 			order.is_fast = False
 		order.client = ClientUser.objects.get(client_user = request.user)
-		
 		driver_name = request.POST.get('driver_name')
 		ads = AddService()
 		if request.POST.get('conditioner') != None:
 			ads.conditioner = request.POST.get('conditioner')
 		else:
 			ads.conditioner = False	
-		if request.POST.get('type_salon') != "any":
-			ads.type_salon = int(type_salon[request.POST.get('type_salon')])
+		if int(request.POST.get('type_salon')) != 0:
+			ads.type_salon = int(request.POST.get('type_salon'))
 		else:
 			ads.type_salon = 0
 		if request.POST.get('place_from_things') != None:
@@ -276,7 +275,6 @@ def get_driver_to_order(request):
 		order.save()
 		
 		alldu = DriverUser.objects.all()
-
 		#filter(location__x__gte = order.start_location.x - 0.1).filter(location__x__lte = order.start_location.x + 0.1).filter(location__y__gte = order.start_location.y - 0.1).filter(location__y__lte = order.start_location.y + 0.1)
 		drivers = DriverUser.objects.filter(state = 0)
 		if ads.conditioner == True:
@@ -300,7 +298,7 @@ def get_driver_to_order(request):
 			
 		return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
 	except Exception, e:
-		print str(e)
+		print "Erorr Last = " + str(e)
 
 def return_driver_data_result(request):
 	try:
@@ -376,6 +374,7 @@ def get_orders(request):
 	try:
 		driver = DriverUser.objects.get(user__username = request.user)
 		orders = Order.objects.filter(driver = driver).filter(state = 0)
+		print query_to_json(orders)
 	except Exception, e:
 		print str(e)
 	return HttpResponse(query_to_json(orders))
@@ -418,7 +417,7 @@ def last_result(request):
 		elif order.state == 2:
 			return HttpResponse(json.dumps({'status':'clear'}))
 		else:
-			return HttpResponse(json.dumps({'status':'wait'}))
+			return HttpResponse(json.dumps({'status':'waitj'}))
 	except Exception, e:
 		print str(e)
 
@@ -427,7 +426,6 @@ def get_result_from_driver(request):
 	try:
 		client = ClientUser.objects.get(client_user__username = request.user)
 		order = Order.objects.filter(client = client).last()
-		print order.to_json()
 		#print"order.pk=" + str(order.pk)
 		#print "order.state = " + str(order.state)
 		if order.state == 0:
@@ -611,8 +609,8 @@ def change_client_data(request):
 def profile_to_json(request):
 	user = request.POST.get('username')
 	if request.POST.get('type_user') == 'driver':
-		user = DriverUser.objects.get(user__username = user)
+		order = Order.objects.get(pk = int(request.POST.get('order_id')))
+		user = order.driver
 	else:
 		user = ClientUser.objects.get(client_user__username = user)
-
 	return HttpResponse(json.dumps(user.to_json()))

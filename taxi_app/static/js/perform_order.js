@@ -23,7 +23,6 @@ $(function() {
 			route_length();
 			data = {}
 			setTimeout(function() {
-				console.log(this.drivers);
 				data = return_data_route();
 				$("#viewContainer").remove(); 
 				inf = {};
@@ -72,26 +71,22 @@ $(function() {
 			data: getToken(),
 			success: function(res) {
 				res = JSON.parse(res);
-				console.log("/get_result_from_driver/");
-				console.log(res);
-				$("#cost").text("Cost of travel - " + res.cost);
-				$("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
-				console.log(res.status);	
+				//$("#cost").text("Ціна за поїздку - " + res.order.cost + " грн");
+				//$("#cost").append("<div><input type='button' value='Переглянути інформацію про водія' onclick='driver_infa()'></div>")
 				if (res.status == "apply" || res.status == "ok") {
-					$("#state").text(res.status);
+					$("#state").text("Підтверджено");
 					$(".send").css("display", "inline");
-					$("#cost").append("<p>Cost of travel - " + res.order.cost + "</p>");
-					$("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
-				
+					$("#cost").append("<p>Ціна за поїздку - " + res.cost + " грн</p>");
+					$("#cost").append("<input type='button' value='Переглянути інформацію про водія' onclick='driver_infa()'>")
 					window.clearInterval(interv);
+					setTimeout(function() {window.location.href = "/"}, 10000);
 				}
 				else if (res.status == "clear") {
-					$("#state").text(res.status);
-					console.log('clear');
+					$("#state").text("Відмна замовлення");
 					window.clearInterval(interv);	
 				}
 				else{
-					$("#state").text(res.status);
+					$("#state").text("Очікуйте");
 				}
 			},
 		});
@@ -102,13 +97,13 @@ driver_infa = function() {
   $.ajax({
     url: '/profile_to_json/',
     type: 'POST',
-    data: getToken() + '&type_user=driver&username=' + order.client,
+    data: getToken() + '&type_user=driver&order_id=' + order.pk,
     success: function(res) {
       res = JSON.parse(res);
       console.log(res);
-      $(".user-infa").append("<p>Driver - " + res.username + "</p>");
-      $(".user-infa").append("<p>Rating - " + res.rating + "</p>");
-      $(".user-infa").append("<p>Date registration - " + res.date_registration + "</p>");
+      $(".user-infa").append("<p>Водій - " + res.username + "</p>");
+      $(".user-infa").append("<p>Рейтинг - " + res.rating + "</p>");
+      $(".user-infa").append("<p>Дата реєстрації - " + res.date_registration + "</p>");
     }
   });
 }
