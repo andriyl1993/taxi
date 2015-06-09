@@ -16,18 +16,50 @@
 				<table class="table table-bordered">
 					<tr>
 						{% if user_ == "client" %}
-						<th>Driver</th>
+						<th>Водій</th>
 						{% else %}
-						<th>Client</th>
+						<th>Клієнт</th>
 						{% endif %}
-						<th>Cost</th>
-						<th>Date</th>
-						<th>Start</th>
-						<th>End</th>
-						<th>Time Travel</th>
-						<th>Long Travel</th>
-						<th>State</th>
-						<th>Rating</th>
+						<th>Вартість</th>
+						<th>Дата</th>
+						<th>Звідки</th>
+						<th>Куди</th>
+						<th>Час маршруту</th>
+						<th>Довжина маршруту</th>
+						<th>Стан</th>
+						<th>Рейтинг</th>
+						<th></th>
+					</tr>
+					<tr>
+						{% if user_ == "client" %}
+						<th>driver1</th>
+						{% else %}
+						<th>alex1</th>
+						{% endif %}
+						<th>40</th>
+						<th>12.05.2015</th>
+						<th>київ,ковальський,5</th>
+						<th>київ,хрещатик,5</th>
+						<th>14хв</th>
+						<th>7.5км</th>
+						<th>Виконано</th>
+						<th>5</th>
+						<th></th>
+					</tr>
+					<tr>
+						{% if user_ == "client" %}
+						<th>driver1</th>
+						{% else %}
+						<th>alex1</th>
+						{% endif %}
+						<th>45</th>
+						<th>18.05.2015</th>
+						<th>київ,хрещатик,10</th>
+						<th>київ,пр.Перемоги, 11</th>
+						<th>20хв</th>
+						<th>8.5км</th>
+						<th>Виконується</th>
+						<th>4</th>
 						<th></th>
 					</tr>
 					{% for r in result %}
@@ -82,7 +114,7 @@
 			<div class="row">
 				<hr>
 				<div class="col-md-2"></div>
-				<div class="col-md-10">Alex & Andrew &copy; All rights received</div>
+				<div class="col-md-10">Олександр Ничепорук & Андрій Лецик &copy; Всі права захищено</div>
 			</div>
 		</div>
 	</div>

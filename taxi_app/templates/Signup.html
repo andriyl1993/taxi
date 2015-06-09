@@ -39,61 +39,61 @@
 
           {% csrf_token %}
           <div id="legend">
-            <legend class="">Register</legend>
+            <legend class="">Реєстрація</legend>
           </div>       
           <div class="form-group">
             <!-- Username -->
-            <label class="control-label"  for="username">Username</label>
+            <label class="control-label"  for="username">Логін</label>
             <div class="controls">
               <input type="text" id="username" name="username" placeholder="" class="form-control">
-              <p class="help-block">Username can contain any letters or numbers, without spaces</p>
+              <p class="help-block">Логін може містити цифри і літери без пробілів</p>
             </div>
           </div>
 
           <div class="form-group">
             <!-- First name -->
-            <label class="control-label"  for="first_name">FirstName</label>
+            <label class="control-label"  for="first_name">Прізвище</label>
             <div class="controls">
               <input type="text" id="first_name" name="first_name" placeholder="" class="form-control">
-              <p class="help-block">First name can contain any letters, without spaces</p>
+              <p class="help-block">Прізвище може містити літери, знак "-" без пробілів</p>
             </div>
           </div>
           <div class="form-group">
             <!-- Last name -->
-            <label class="control-label"  for="last_name">LastName</label>
+            <label class="control-label"  for="last_name">Ім’я</label>
             <div class="controls">
               <input type="text" id="last_name" name="last_name" placeholder="" class="form-control">
-              <p class="help-block">Last name can contain any letters and '-', without spaces</p>
+              <p class="help-block">Ім’я може містити літери, знак "-" без пробілів</p>
             </div>
           </div>
           <div class="form-group">
             <!-- E-mail -->
-            <label class="control-label" for="email">E-mail</label>
+            <label class="control-label" for="email">Електронна пошта</label>
             <div class="controls">
               <input type="text" id="email" name="email" placeholder="" class="form-control">
-              <p class="help-block">Please provide your E-mail</p>
+              <p class="help-block">Будь ласка, введіть електронну пошту</p>
             </div>
           </div>
 
           <div class="form-group">
             <!-- Password-->
-            <label class="control-label" for="password">Password</label>
+            <label class="control-label" for="password">Пароль</label>
             <div class="controls">
               <input type="password" id="password" name="password" placeholder="" class="form-control">
-              <p class="help-block">Password should be at least 4 characters</p>
+              <p class="help-block">Мінімум 4 символи</p>
             </div>
           </div>
 
           <div class="form-group">
             <!-- Password-->
-            <label class="control-label" for="password">Repeat your password</label>
+            <label class="control-label" for="password">Повторити пароль</label>
             <div class="controls">
               <input type="password" id="password" name="password" placeholder="" class="form-control">
-              <p class="help-block">Password should be at least 4 characters</p>
+              <p class="help-block">Мінімум 4 символи</p>
             </div>
           </div>
-          <input type="radio" name="client" value="Client" id="client_radiobutton" checked="True"> Client<br>
-          <input type="radio" name="driver" id="driver_radiobutton" value="Driver"> Driver<br>
+          <input type="radio" name="client" value="Client" id="client_radiobutton" checked="True">Клієнт<br>
+          <input type="radio" name="driver" id="driver_radiobutton" value="Driver">Водій<br>
 
           <div class="form-group" id="client_register_form" style="display:block;">
             {% include 'client_register_form.html' %}
@@ -103,7 +103,7 @@
           </div>
       <div class="form-group">
         <!-- Button -->
-        <button class="btn btn-primary" type="submit">Register</button>
+        <button class="btn btn-primary" type="submit">Зареєструватися</button>
         <div class="controls"></div>
       </div>
     </fieldset>

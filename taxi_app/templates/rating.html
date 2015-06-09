@@ -17,15 +17,15 @@
 
 	<table class="table">
 		<tr>
-			<th>Driver</th>
-			<th>Client</th>
+			<th>Водій</th>
+			<th>Клієнт</th>
 			{% if user_type == "driver" %}
-				<th>Mark - car_state</th>
-				<th>Mark - order_execution</th>
-				<th>Mark - comfort</th>
-				<th>Mark - avarage_value</th>
+				<th>Стан авто</th>
+				<th>Якість виконання замовлення</th>
+				<th>Комфорт</th>
+			0	<th>Середнє значення</th>
 			{% else %}
-				<th>Mark</th>
+				<th>Оцінити</th>
 			{% endif %}
 	   </tr>
 		{% for r in ratings %}
@@ -43,13 +43,13 @@
 			</tr>
 		{% endfor %}
 	</table>
-	<h4>Result = {{ mark }}</h4></div>
+	<h4>Результат = {{ mark }}</h4></div>
 		</div>
 		<div class="footer">
 			<div class="row">
 				<hr>
 				<div class="col-md-2"></div>
-				<div class="col-md-10">Alex & Andrew &copy; All rights received</div>
+				<div class="col-md-10">Олександр Ничепорук & Андрій Лецик &copy; Всі права захищено</div>
 			</div>
 		</div>
 	</div>

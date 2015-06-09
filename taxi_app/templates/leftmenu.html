@@ -3,14 +3,14 @@
 <div class="list-group">
 	{% if user2.is_authorized %}
           {% if user2.photo %}
-	<a href = '/order/' class="list-group-item">Create order</a>
+	<a href = '/order/' class="list-group-item">Створити замовлення</a>
 	{% else %}
-	<a href = '/driver_order/' class="list-group-item">Get order</a>
+	<a href = '/driver_order/' class="list-group-item">Отримати замовлення</a>
 	{% endif %}
-	<a href='/history/' class="list-group-item">History</a>
-	<a href='/rating/' class="list-group-item">Rating</a>
+	<a href='/history/' class="list-group-item">Історія замовлень</a>
+	<a href='/rating/' class="list-group-item">Рейтинг</a>
 	{% if user2.photo %}
-	<a href="/favourite_drivers/" class="list-group-item">Favourite drivers</a>
+	<a href="/favourite_drivers/" class="list-group-item">Улюблені водії</a>
 	{% endif %}
 {% if not user2.photo %}
 <input type="hidden" id="driver" value="{{ driver }}">

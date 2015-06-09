@@ -18,89 +18,90 @@
 					<form class="form-horizontal" id="order_form" action="/get_driver_to_order/" method="post">
 						{% csrf_token %}
 						<div class="form-group">
-							<label for="inputCoords" class="col-sm-3 control-label">Coords</label>
+							<label for="inputCoords" class="col-sm-4 control-label">Координати</label>
 							<div class="col-sm-2">
 								<input class="form-control" type="checkbox" name="is_coords"></div>
 						</div>
 						<div class="form-group">
-							<label for="inputStart" class="col-sm-3 control-label">Start</label>
-							<div class="col-sm-9">
+							<label for="inputStart" class="col-sm-4 control-label">Звідки</label>
+							<div class="col-sm-8">
 								<input class="form-control" type="text" name="start" id="start"></div>
 						</div>
 						<div class="form-group">
-							<label for="inputEnd" class="col-sm-3 control-label">End</label>
-							<div class="col-sm-9">
+							<label for="inputEnd" class="col-sm-4 control-label">Куди</label>
+							<div class="col-sm-8">
 								<input class="form-control" type="text" name="end" id="end"></div>
 						</div>
 						<div class="form-group">
-							<label for="inputDatetime" class="col-sm-3 control-label">Time</label>
-							<div class="col-sm-9">
+							<label for="inputDatetime" class="col-sm-4 control-label">Час</label>
+							<div class="col-sm-8">
 								<input class="form-control" name="date" type="date">
-								<input class="form-control" name="time" type="time"><!-- 
+								<input class="form-control" name="time" type="time">
+								<!-- 
 
-								<input class="form-control" type="datetime" name="datetime" placeholder="yyyy-mm-dd hh:mm"></div> -->
+								<input class="form-control" type="datetime" name="datetime" placeholder="yyyy-mm-dd hh:mm">--></div>
 						</div>
 						<div class="form-group">
-							<label for="inputCoords" class="col-sm-3 control-label">Is fast</label>
+							<label for="inputCoords" class="col-sm-4 control-label">Терміново</label>
 							<div class="col-sm-2">
 								<input class="form-control" type="checkbox" name="is_fast"></div>
 						</div>
 						<div class="form-group">
-							<label for="inputCoords" class="col-sm-3 control-label">Conditioner</label>
+							<label for="inputCoords" class="col-sm-4 control-label">Кондиціонер</label>
 							<div class="col-sm-2">
 								<input class="form-control" type="checkbox" name="conditioner"></div>
 						</div>
 						<div class="form-group">
-							<label for="inputCoords" class="col-sm-3 control-label">Type of salon</label>
-							<div class="col-sm-9">
+							<label for="inputCoords" class="col-sm-4 control-label">Тип салону</label>
+							<div class="col-sm-8">
 								<select class="form-control" name="type_salon" value="any"></div>
-									<option>any</option>
-									<option>cheap</option>
-									<option>business</option>
-									<option>jeep</option>
+								<option>Будь-який</option>
+								<option>Бюджет</option>
+								<option>Бізнес</option>
+								<option>Джип</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="inputCoords" class="col-sm-4 control-label">Місце для багажу</label>
+						<div class="col-sm-2">
+							<input class="form-control" type="checkbox" name="place_from_things"></div>
+					</div>
+					<div>
+						<div class="form-group">
+							<label for="inputCoords" class="col-sm-4 control-label">Кількість пасажирів</label>
+							<div class="col-sm-8">
+								<select class="form-control" name="count_places" value="1">
+									<option>1</option>
+									<option>2</option>
+									<option>3</option>
+									<option>4</option>
+									<option>5</option>
+									<option>6</option>
+									<option>7</option>
+									<option>8</option>
 								</select>
 							</div>
 						</div>
-						<div class="form-group">
-							<label for="inputCoords" class="col-sm-3 control-label">Place for stuff</label>
-							<div class="col-sm-2">
-								<input class="form-control" type="checkbox" name="place_from_things"></div>
-						</div>
-						<div>
-							<div class="form-group">
-								<label for="inputCoords" class="col-sm-3 control-label">Count of Passagers</label>
-								<div class="col-sm-9">
-									<select class="form-control" name="count_places" value="1">
-										<option>1</option>
-										<option>2</option>
-										<option>3</option>
-										<option>4</option>
-										<option>5</option>
-										<option>6</option>
-										<option>7</option>
-										<option>8</option>
-									</select>
-								</div>
-							</div>
-						</div>
-							<input type="hidden" value="" id="driver_name" name="driver_name">
-
-							<div class="col-md-3">
-								<button id="create_order" type="submit" class="btn btn-primary btn-block">Send</button>
-							</div>
-						</form>
 					</div>
-				</div>
-			</div>
-		</div>
-		<div class="footer">
-			<div class="row">
-				<hr>
-				<div class="col-md-2"></div>
-				<div class="col-md-10">Alex & Andrew &copy; All rights received</div>
+					<input type="hidden" value="" id="driver_name" name="driver_name">
+
+					<div class="col-md-6">
+						<button id="create_order" type="submit" class="btn btn-primary btn-block">Відправити</button>
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
+</div>
+<div class="footer">
+	<div class="row">
+		<hr>
+		<div class="col-md-2"></div>
+		<div class="col-md-10">Олександр Ничепорук & Андрій Лецик &copy; Всі права захищено</div>
+	</div>
+</div>
+</div>
 
 </body>
 </html>

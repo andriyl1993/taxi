@@ -1,6 +1,6 @@
 function getToken() {
-	var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-	return 'csrfmiddlewaretoken=' + token;
+  var token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+  return 'csrfmiddlewaretoken=' + token;
 }
 
 $(function() {
@@ -50,19 +50,22 @@ $(function() {
 });
 
 $(function() {
-	$(".send").click(function() {
-		$.ajax({
-			url: "/apply/",
-			type: "POST",
-			data: getToken() + "&res=" + $(this).attr('value'),
-			success: function() {
-				setTimeout(function() { window.location.href = window.location.href; }, 15000);
-			}
-		});
-	});
+  $(".send").click(function() {
+    $.ajax({
+      url: "/apply/",
+      type: "POST",
+      data: getToken() + "&res=" + $(this).attr('value'),
+      success: function() {
+        setTimeout(function() {
+          window.location.href = window.location.href;
+        }, 15000);
+      }
+    });
+  });
 });
 
 $(function() {
+<<<<<<< HEAD
 	interv = setInterval(function() {
 		$.ajax({
 			url: "/get_result_from_driver/",
@@ -94,19 +97,49 @@ $(function() {
 			},
 		});
 	}, 20000);
+=======
+  interv = setInterval(function() {
+    $.ajax({
+      url: "/get_result_from_driver/",
+      type: "POST",
+      data: getToken(),
+      success: function(res) {
+        res = JSON.parse(res);
+        $("#cost").text("Cost of travel - " + res.cost);
+        $("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
+
+        if (res.status == "apply" || res.status == "ok") {
+          console.log("apply");
+          $("#state").text(res.status);
+          $(".send").css("display", "inline");
+          $("#cost").append("<p>Cost of travel - " + res.cost + "</p>");
+          $("#cost").append("<input type='button' value='Infa about driver' onclick='driver_infa()'>")
+
+          window.clearInterval(interv);
+        } else if (res.status == "clear") {
+          $("#state").text(res.status);
+          console.log('clear');
+          window.clearInterval(interv);
+        } else {
+          $("#state").text(res.status);
+        }
+      },
+    });
+  }, 20000);
+>>>>>>> 7cc38d13f93cdae0dfc1cd4606183d1de27727e4
 });
 
 driver_infa = function() {
-	$.ajax({
-		url: '/profile_to_json/',
-		type: 'POST',
-		data: getToken() + '&type_user=driver&username=' + order.client,
-		success: function(res) {
-			res = JSON.parse(res);
-			console.log(res);
-			$(".user-infa").append("<p>Driver - " + res.username + "</p>");
-			$(".user-infa").append("<p>Rating - " + res.rating + "</p>");
-			$(".user-infa").append("<p>Date registration - " + res.date_registration + "</p>");
-		}
-	});
+  $.ajax({
+    url: '/profile_to_json/',
+    type: 'POST',
+    data: getToken() + '&type_user=driver&username=' + order.client,
+    success: function(res) {
+      res = JSON.parse(res);
+      console.log(res);
+      $(".user-infa").append("<p>Driver - " + res.username + "</p>");
+      $(".user-infa").append("<p>Rating - " + res.rating + "</p>");
+      $(".user-infa").append("<p>Date registration - " + res.date_registration + "</p>");
+    }
+  });
 }
