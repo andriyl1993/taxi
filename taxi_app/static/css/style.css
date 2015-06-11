@@ -1,3 +1,72 @@
 .red-border{
     border: 1px solid red;
 }
+
+.container .back {
+	text-decoration: none;   
+	color: black; 
+}
+
+.container a .btn-div {
+	width: 110px;
+	border-radius: 6px;
+	background-color: gray;
+	height: 40px;
+	text-align: center;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.container a .btn-div:hover {
+	background-color: gainsboro;
+}
+
+.container a .btn-div span {
+	text-decoration: none; 
+	color: black; 
+	position: relative;
+	bottom: -8px;
+}
+
+.container table tr .post_rating {
+	border-radius: 5px;
+	height:30px;
+
+}
+
+.container table tr .td-mark {
+	border: none;
+}
+
+.container table tr .td-favourite {
+	border: none;
+}
+
+.container table tr td .add_to_favourite, .mark {
+	border-radius: 5px;
+	position: relative;
+	text-align: center;
+	bottom: -27px;
+	height:30px;
+}
+
+.container table tr td a {
+	text-decoration: none;
+}
+
+.container table tr td .create_order {
+	background-color: greenyellow;
+	border-radius: 5px;
+	width: 170px;
+	height: 30px;
+	text-align: center;
+}
+
+.container table tr td .create_order:hover {
+	background-color: rgb(244, 255, 80);
+}
+
+.container table tr td .create_order span {
+	position: relative;
+	bottom: -3px;
+}

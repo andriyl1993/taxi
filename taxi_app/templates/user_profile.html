@@ -1,5 +1,4 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,128 +9,154 @@
     }    
   </style>
 
-	<title>Taxi</title>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"></head>
+  <title>Taxi</title>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"></head>
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 <body>
-	{% csrf_token %}
-	<div>{% include 'topmenu.html' %}</div>
-	{% if type_user == "driver" %}
-      <div style="padding-left: 30px;">
-  		<table class="table table-bordered">
+  {% csrf_token %}
+  <div>{% include 'topmenu.html' %}</div>
+  {% if type_user == "driver" %}
+  <div class="container">
+    <table class="table table-bordered">
       <tbody>
         <tr>
-        <td>Логін водія</td>
-        <td>{{ useruser.user }}</td>
-      </tr>
+          <td>Логін водія</td>
+          <td>{{ useruser.user }}</td>
+        </tr>
         <td>Автомобіль</td>
-        <td><img  width="100" height="100" src="/media/{{useruser.photo_car.docfile}}" alt="no photo">
-      </td>
-      <tr>
+        <td>
+          <img  width="100" height="100" src="/media/{{useruser.photo_car.docfile}}" alt="no photo"></td>
+        <tr>
           <td>Фото документів</td>
-  		<td><img  width="100" height="100" src="/media/{{useruser.photo_car_license.docfile}}"  alt="no photo"></td>
-    </tr>
-    <tr>
-      <td>Фото документів на автомобіль</td>
-      <td><img  width="100" height="100" src="/media/{{useruser.photo_driver_license.docfile}}" alt="no photo"></td>
-      </tr>
-  		<tr>
-        <td>Про водія</td><td>{{useruser.about_me}}</td>
-      </tr>
-      <tr>
-  		<td>Стан водія</td>
-      <td>{{ useruser.state }}</td>
-    </tr>
-    <tr><td>Дата реєстрації</td><td>{{ useruser.date_registration }}</td></tr>
-    <tr><td>Рейтинг</td><td>{{ useruser.rating }}</td></tr>
-    <tr><td><b>Додаткові сервіси:</b></td></tr>
-    <tr><td>Кондиціонер</td><td>{{ useruser.add_service.conditioner }}</td></tr>
-     <tr><td>Тип салону </td><td>{{ useruser.add_service.type_salon }}</td></tr>
-       <tr><td>Місце для багажу</td><td>{{ useruser.add_service.place_from_things }}</td></tr>
-       <tr><td>Кількість місць </td><td>{{ useruser.add_service.count_places }}</td></tr>
-     </tbody>
+          <td>
+            <img  width="100" height="100" src="/media/{{useruser.photo_car_license.docfile}}"  alt="no photo"></td>
+        </tr>
+        <tr>
+          <td>Фото документів на автомобіль</td>
+          <td>
+            <img  width="100" height="100" src="/media/{{useruser.photo_driver_license.docfile}}" alt="no photo"></td>
+        </tr>
+        <tr>
+          <td>Про водія</td>
+          <td>{{useruser.about_me}}</td>
+        </tr>
+        <tr>
+          <td>Стан водія</td>
+          <td>{{ useruser.state }}</td>
+        </tr>
+        <tr>
+          <td>Дата реєстрації</td>
+          <td>{{ useruser.date_registration }}</td>
+        </tr>
+        <tr>
+          <td>Рейтинг</td>
+          <td>{{ useruser.rating }}</td>
+        </tr>
+        <tr>
+          <td> <b>Додаткові сервіси:</b>
+          </td>
+        </tr>
+        <tr>
+          <td>Кондиціонер</td>
+          <td>{{ useruser.add_service.conditioner }}</td>
+        </tr>
+        <tr>
+          <td>Тип салону</td>
+          <td>{{ useruser.add_service.type_salon }}</td>
+        </tr>
+        <tr>
+          <td>Місце для багажу</td>
+          <td>{{ useruser.add_service.place_from_things }}</td>
+        </tr>
+        <tr>
+          <td>Кількість місць</td>
+          <td>{{ useruser.add_service.count_places }}</td>
+        </tr>
+      </tbody>
     </table>
-    <a href="/" style="text-decoration: none; color: black;">
-      <span class="glyphicon" style="text-decoration: none; color: black;" aria-hidden="true">Повернутися</span>
+    <a href="/" class="back">
+      <div class="btn-div">
+        <span>На головну</span>
+      </div>
     </a>
+    {% if useruser.user == user %}
+    {% endif %}
 
-		{% if useruser.user == user %}
-		{% endif %}
+  {% else %}
+    <td>
+      Клієнт - <b>{{ useruser.client_user }}</b>
+    </td>
+    <td>
+      <img  width="100" height="100" src="/media/{{ useruser.photo.docfile }}" alt="no photo">Photo</td>
+    <td>Рейтинг - {{ useruser.rating }}</td>
+    <td>Дата реєстрації - {{ useruser.date_registration }}</td>
+    {% if useruser.client_user == user %}
+    <form id="change_client_data" action="/change_client_data/" method="post">
 
-	{% else %}
-		<td>Клієнт - <b>{{ useruser.client_user }}</b></td>
-		<td><img  width="100" height="100" src="/media/{{ useruser.photo.docfile }}" alt="no photo">Photo</td>
-		<td>Рейтинг - {{ useruser.rating }}</td>
-		<td>Дата реєстрації - {{ useruser.date_registration }}</td>
+      <div class="form-group">
+        <!-- Username -->
+        <label class="control-label"  for="username">Логін</label>
+        <div class="controls">
+          <input type="text" value="{{ useruser.client_user.username }}" id="username" name="username" placeholder="" class="form-control">
+          <td class="help-block">Username can contain any letters or numbers, without spaces</td>
+        </div>
+      </div>
 
-		{% if useruser.client_user == user %}
-			<form id="change_client_data" action="/change_client_data/" method="post">
-			
-				<div class="form-group">
-            <!-- Username -->
-            <label class="control-label"  for="username">Логін</label>
-            <div class="controls">
-              <input type="text" value="{{ useruser.client_user.username }}" id="username" name="username" placeholder="" class="form-control">
-              <td class="help-block">Username can contain any letters or numbers, without spaces</td>
-            </div>
-          </div>
+      <div class="form-group">
+        <!-- First name -->
+        <label class="control-label"  for="first_name">FirstName</label>
+        <div class="controls">
+          <input type="text" value="{{ useruser.client_user.first_name }}" id="first_name" name="first_name" placeholder="" class="form-control">
+          <td class="help-block">First name can contain any letters, without spaces</td>
+        </div>
+      </div>
+      <div class="form-group">
+        <!-- Last name -->
+        <label class="control-label"  for="last_name">LastName</label>
+        <div class="controls">
+          <input type="text" value="{{ useruser.client_user.last_name }}" id="last_name" name="last_name" placeholder="" class="form-control">
+          <td class="help-block">Last name can contain any letters and '-', without spaces</td>
+        </div>
+      </div>
+      <div class="form-group">
+        <!-- E-mail -->
+        <label class="control-label" for="email">E-mail</label>
+        <div class="controls">
+          <input type="text" value="{{ useruser.client_user.email }}" id="email" name="email" placeholder="" class="form-control">
+          <td class="help-block">Please provide your E-mail</td>
+        </div>
+      </div>
 
-          <div class="form-group">
-            <!-- First name -->
-            <label class="control-label"  for="first_name">FirstName</label>
-            <div class="controls">
-              <input type="text" value="{{ useruser.client_user.first_name }}" id="first_name" name="first_name" placeholder="" class="form-control">
-              <td class="help-block">First name can contain any letters, without spaces</td>
-            </div>
-          </div>
-          <div class="form-group">
-            <!-- Last name -->
-            <label class="control-label"  for="last_name">LastName</label>
-            <div class="controls">
-              <input type="text" value="{{ useruser.client_user.last_name }}" id="last_name" name="last_name" placeholder="" class="form-control">
-              <td class="help-block">Last name can contain any letters and '-', without spaces</td>
-            </div>
-          </div>
-          <div class="form-group">
-            <!-- E-mail -->
-            <label class="control-label" for="email">E-mail</label>
-            <div class="controls">
-              <input type="text" value="{{ useruser.client_user.email }}" id="email" name="email" placeholder="" class="form-control">
-              <td class="help-block">Please provide your E-mail</td>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <!-- Password-->
-            <label class="control-label" for="password">Password</label>
-            <div class="controls">
-              <input type="password" id="password" name="password" placeholder="" class="form-control">
-              <td class="help-block">Password should be at least 4 characters</td>
-            </div>
-          </div>
-          {% csrf_token %}
-
-          <div class="form-group">
-            <!-- Password-->
-            <label class="control-label" for="password">Repeat your password</label>
-            <div class="controls">
-              <input type="password" id="password" name="password" placeholder="" class="form-control">
-              <td class="help-block">Password should be at least 4 characters</td>
-            </div>
-          </div>
-          	<div class="container">
-				<div class="col-lg-6 offset-3">
-				    <input class="btn btn-default" type="file" name="photo">
-				</div>
-			</div>
-				<div class="form-group">
-		        <!-- Button -->
-		        	<button class="btn btn-primary" type="submit">Change</button>
-		        <div class="controls"></div>
-     		</div>
-			</form>	
-		{% endif %}
-	{% endif %}
+      <div class="form-group">
+        <!-- Password-->
+        <label class="control-label" for="password">Password</label>
+        <div class="controls">
+          <input type="password" id="password" name="password" placeholder="" class="form-control">
+          <td class="help-block">Password should be at least 4 characters</td>
+        </div>
+      </div>
+      {% csrf_token %}
+      <div class="form-group">
+        <!-- Password-->
+        <label class="control-label" for="password">Repeat your password</label>
+        <div class="controls">
+          <input type="password" id="password" name="password" placeholder="" class="form-control">
+          <td class="help-block">Password should be at least 4 characters</td>
+        </div>
+      </div>
+      <div class="container">
+        <div class="col-lg-6 offset-3">
+          <input class="btn btn-default" type="file" name="photo"></div>
+      </div>
+      <div class="form-group">
+        <!-- Button -->
+        <button class="btn btn-primary" type="submit">Change</button>
+        <div class="controls"></div>
+      </div>
+    </form>
+    {% endif %}
+  {% endif %}
   </div>
 </body>
 </html>

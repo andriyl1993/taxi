@@ -4,8 +4,10 @@
 <head>
 	<title>Taxi</title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
-	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"></head>
+	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/main_menu.js' %}"></script>
+</head>
 <body>
 	{% csrf_token %}
 	<div>{% include 'topmenu.html' %}</div>
@@ -28,7 +30,6 @@
 						<th>Довжина маршруту</th>
 						<th>Стан</th>
 						<th>Рейтинг</th>
-						<th></th>
 					</tr>
 					{% for r in result %}
 					<tr>
@@ -67,23 +68,26 @@
 					{% endif %}
 						</td>
 						<td style="display: none" class="pk">{{ r.0.pk }}</td>
-						<td>
+						<td class="td-mark">
 							<button class="mark">Mark</button>
 						</td>
-						<td>
+						<td class="td-favourite">
 							{% if user_ == "client" %}
-							<input type="button" class="add_to_favourite btn-success" value="Add to favourite">{% endif %}</td>
+							<input type="button" class="add_to_favourite btn-success" value="Add to favourite">
+							{% endif %}
+						</td>
 					</tr>
 					{% endfor %}
 				</table>
 			</div>
 		
 	</div>
-		<a href="/" style="text-decoration: none;   color: black; margin-top: 9px;left: 281px; vertical-align: middle;">
-			<span class="glyphicon" style="text-decoration: none; color: black; margin-top: 9px;left: 281px; vertical-align: middle;" aria-hidden="true">Повернутися</span>
-		</a>
-		
+	<a href="/" class="back">
+		<div class="btn-div">
+			<span>Повернутися</span>
 		</div>
+	</a>
+	</div>
 
 		<div class="footer">
 			<div class="row">

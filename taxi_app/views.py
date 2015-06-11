@@ -18,7 +18,7 @@ import yaml
 
 
 driver_state = ['online','has order','offline']
-type_salon = {"any": "0", "cheap": "1", "business": "2", "jeep": "3"}
+type_salon = {u"Будь-який": "0", u"Бюджет": "1", u"Бізнес": "2", u"Джип": "3"}
 
 
 def index(request):
@@ -98,58 +98,65 @@ def register(request):
 	
 		
 	try:
-		du = DriverUser()
-		photo_car = Document(docfile = request.POST['photo_car'])
-		photo_car.save()
-		du.photo_car = photo_car
-		photo_driver_license = Document(docfile = request.POST['photo_driver_license']) 
-		photo_driver_license.save()
-		du.photo_driver_license = photo_driver_license
-		photo_car_license = Document(docfile = request.POST['photo_car_license'])
-		photo_car_license.save()
-		du.photo_car_license = photo_car_license
-		du.rate_min = request.POST['rate_min']
-		du.rate_km_hightway = request.POST['rate_km_hightway']
-		du.rate_km_city = request.POST['rate_km_city']
-		du.about_me = request.POST['about_me']
-		du.coefficient_congestion = request.POST['coefficient_congestion']
-		du.state = 2   #offline 
-		du.rating = 0
-		du.is_authorized = False
-		user = User.objects.create_user(username = _username, password = _password,email = _email, first_name = _first_name, last_name = _last_name)
-		user.save()
-		du.user = User.objects.get(username = _username)
+		if len(request.POST.get('rate_min')) > 0:
+			du = DriverUser()
+			if request.POST.get('photo_car'):
+				photo_car = Document(docfile = request.POST['photo_car'])
+				photo_car.save()
+				du.photo_car = photo_car
+			if request.POST.get('photo_driver_license'):
+				photo_driver_license = Document(docfile = request.POST['photo_driver_license']) 
+				photo_driver_license.save()
+				du.photo_driver_license = photo_driver_license
+			if request.POST.get('photo_car_license'):
+				photo_car_license = Document(docfile = request.POST['photo_car_license'])
+				photo_car_license.save()
+				du.photo_car_license = photo_car_license
+			du.rate_min = request.POST['rate_min']
+			du.rate_km_hightway = request.POST['rate_km_hightway']
+			du.rate_km_city = request.POST['rate_km_city']
+			du.about_me = request.POST['about_me']
+			if request.POST.get('coefficient_congestion') != "":
+				du.coefficient_congestion = float(request.POST['coefficient_congestion'])
+			else:
+				du.coefficient_congestion  = 0
+			du.state = 2   #offline 
+			du.rating = 0
+			du.is_authorized = False
+			user = User.objects.create_user(username = _username, password = _password,email = _email, first_name = _first_name, last_name = _last_name)
+			user.save()
+			du.user = User.objects.get(username = _username)
 
-		adds = AddService()
-		if request.POST.get('conditioner'):
-			adds.conditioner = request.POST.get('conditioner')
-		else:
-			adds.conditioner = False
-		adds.type_salon = int(request.POST.get('type_salon'))
-		if request.POST.get('place_from_things'):
-			adds.place_from_things = request.POST.get('place_from_things')
-		else:
-			adds.place_from_things = False
-		adds.count_places = int(request.POST.get('count_places'))
-		adds.save()
-		du.add_service = adds
-		loc = Location()
-		loc.save()
-		du.location = loc
-		du.save()
-		return redirect('/')
-	except Exception, e:
-		print str(e)
-		try:
+			adds = AddService()
+			if request.POST.get('conditioner'):
+				adds.conditioner = request.POST.get('conditioner')
+			else:
+				adds.conditioner = False
+			
+			typesal = request.POST.get('type_salon')
+			adds.type_salon = type_salon[typesal]
+			if request.POST.get('place_from_things'):
+				adds.place_from_things = request.POST.get('place_from_things')
+			else:
+				adds.place_from_things = False
+			adds.count_places = int(request.POST.get('count_places'))
+			adds.save()
+			print "this"
+
+			du.add_service = adds
+			loc = Location()
+			loc.save()
+			du.location = loc
+			du.save()
+			print "this"
+
+			return redirect('/')
+		else:	
 			cu = ClientUser()
-
 			cu.rating = 0
 			img = Document()
-			try:
-				img.docfile = request.POST['photo']
-				img.save()
-			except Exception, e:
-				print "Photo err - " + str(e)
+			img.docfile = request.POST['photo']
+			img.save()
 			cu.photo = img
 			cu.is_authorized = False
 			user = User.objects.create_user(username = _username, password = _password,email = _email, first_name = _first_name, last_name = _last_name)
@@ -158,8 +165,8 @@ def register(request):
 			cu.client_user = user
 			cu.save()
 			return redirect('/')
-		except Exception, e:
-			return HttpResponse("error = " + str(e))
+	except Exception, e:
+		return HttpResponse("error = " + str(e))
 
 ########################################################################
 

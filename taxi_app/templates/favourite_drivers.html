@@ -1,5 +1,4 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -12,6 +11,7 @@
 	<title>Taxi</title>
 	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"></head>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/main_menu.js' %}"></script>
 <body>
 	{% csrf_token %}
@@ -21,23 +21,31 @@
 			<div class="col-md-2">{% include 'leftmenu.html' %}</div>
 			<div class="col-md-10"></div>
 		</div>
-	<table class="table table-bordered">
-		<tr>
-			<th>Водій</th>
-			<th>Статус замовлення</th>
-	   </tr>
-		{% for d in fd %}
-			<tr> 
-				<td><a href="/driver_profile/{{ d.user }}">{{ d.user }}</a></td>
-				<td>{% if d.state == 0 %} online {% elif d.state == 1 %} has order {% else %} offline {% endif %}</td>
-				<td class="link"><a href="/order/{{ d.user.username }}">Створити замовлення</a></td>
+		<table class="table table-bordered">
+			<tr>
+				<th>Водій</th>
+				<th>Статус замовлення</th>
 			</tr>
-		{% endfor %}
-	</table>
-	<a href="/" style="text-decoration: none; color: black;">
-      <span class="glyphicon" style="text-decoration: none; color: black;" aria-hidden="true">Повернутися</span>
-    </a>
+			{% for d in fd %}
+			<tr>
+				<td>
+					<a href="/driver_profile/{{ d.user }}">{{ d.user }}</a>
+				</td>
+				<td>
+					{% if d.state == 0 %} online {% elif d.state == 1 %} has order {% else %} offline {% endif %}
+				</td>
+				<td class="link">
+					<a href="/order/{{ d.user.username }}" style="text-decoration: none; color: black;"><div class="create_order"><span>Створити замовлення</span></div></a>
+				</td>
+			</tr>
+			{% endfor %}
+		</table>
+		<a href="/" class="back">
+			<div class="btn-div">
+				<span>Повернутися</span>
+			</div>
+		</a>
 
 	</div>
-	</body>
-	</html>
+</body>
+</html>

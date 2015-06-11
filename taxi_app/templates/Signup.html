@@ -6,6 +6,7 @@
 	<title>Taxi</title>
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   <script src="{% static 'js/server_post.js' %}"></script>
   <script src="{% static 'js/sign_up.js' %}"></script>
 </head>
@@ -46,7 +47,7 @@
             <label class="control-label"  for="username">Логін</label>
             <div class="controls">
               <input type="text" id="username" name="username" placeholder="" class="form-control">
-              <p class="help-block">Логін може містити цифри і літери без пробілів</p>
+              <p class="help-block">Логін може містити цифри і літери без пробілів і мати довжину не менше 4 символів</p>
             </div>
           </div>
 
