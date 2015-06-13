@@ -1,18 +1,16 @@
 {% load staticfiles %}
-
 <!DOCTYPE html>
 <html>
 <head>
 	<title>Taxi</title>
 	<script src="//api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
-	<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.0.min.js"></script>
+	<script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
 
 	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"></head>
 
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/multiroute_driving.js' %}"></script>
 	<script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/perform_order.js' %}"></script>
-
-
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 
 	<style>
         #map {
@@ -24,14 +22,16 @@
 	<input type="hidden" id="order_json" value="{{ json_order }}">
 	<input type="hidden" id="drivers_json" value="{{ drivers }}">
 	<div>{% include 'topmenu.html' %}</div>
-	
 	{% csrf_token %}
-	<div id="map" style="display: none;"></div>
-	<div id="state"></div>
-	<div id="cost"></div>
-	<input type="button" class="send" style="display:none" value="Так">
-	<input type="button" class="send" style="display:none" value="Ні">
-	<!-- <div id="viewContainer" style="display: none;"></div> -->
+	<div class="order-container">
+		<div id="map" style="display: none;"></div>
+		<div id="state"></div>
+		<div id="cost"></div>
+		<input type="button" class="send add_order" style="display:none" value="Так">
+		<input type="button" class="send clear_order" style="display:none" value="Ні">
+		<!-- <div id="viewContainer" style="display: none;"></div>
+	-->
 	<div class="user-infa"></div>
+</div>
 </body>
-</html>	
+</html>

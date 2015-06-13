@@ -124,11 +124,16 @@ function return_data_route() {
 }
 
 function init() {
-  geolocation = ymaps.geolocation;
-  myMap = new ymaps.Map('map', {
-    center: [55, 34],
-    zoom: 10
-  });
+  try {
+    geolocation = ymaps.geolocation;
+    myMap = new ymaps.Map('map', {
+      center: [55, 34],
+      zoom: 10
+    });
+  }
+  catch(e) {
+    alert("error");
+  }
 
   // Сравним положение, вычисленное по ip пользователя и
   // положение, вычисленное средствами браузера.
@@ -348,5 +353,11 @@ function route_length() {
   })
 }
 
-
-ymaps.ready(init);
+try {
+  ymaps.ready(init);
+}
+catch(e) {
+  $.ajax({
+    url: "/regime/",
+  })
+}

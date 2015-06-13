@@ -28,6 +28,7 @@ urlpatterns = [
 	url(r'^driver_profile/', driver_profile),
 	url(r'^client_profile/', client_profile),
 	url(r'^profile_to_json/', profile_to_json),
+	url(r'^regime/', regime),
 
 
 	url(r'^get_result_from_driver/', get_result_from_driver),

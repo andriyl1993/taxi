@@ -50,13 +50,14 @@ $(function() {
 
 $(function() {
   $(".send").click(function() {
+  	alert($(this).attr('value'));
     $.ajax({
       url: "/apply/",
       type: "POST",
       data: getToken() + "&res=" + $(this).attr('value'),
       success: function() {
         setTimeout(function() {
-          window.location.href = window.location.href;
+          //window.location.href = window.location.href;
         }, 15000);
       }
     });
@@ -77,12 +78,11 @@ $(function() {
 					$("#state").text("Підтверджено");
 					$(".send").css("display", "inline");
 					$("#cost").append("<p>Ціна за поїздку - " + res.cost + " грн</p>");
-					$("#cost").append("<input type='button' value='Переглянути інформацію про водія' onclick='driver_infa()'>")
+					$("#cost").append("<input type='button' class='data-client' value='Про водія' onclick='driver_infa()'>")
 					window.clearInterval(interv);
-					setTimeout(function() {window.location.href = "/"}, 10000);
 				}
 				else if (res.status == "clear") {
-					$("#state").text("Відмна замовлення");
+					$("#state").text("Відміна замовлення");
 					window.clearInterval(interv);	
 				}
 				else{

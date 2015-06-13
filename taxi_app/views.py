@@ -20,6 +20,11 @@ import yaml
 driver_state = ['online','has order','offline']
 type_salon = {u"Будь-який": "0", u"Бюджет": "1", u"Бізнес": "2", u"Джип": "3"}
 
+regime_offline = False
+
+def regime(request):
+	print "offline"
+	return HttpResponse("ok")
 
 def index(request):
 	try:
@@ -233,7 +238,9 @@ def get_driver_to_order(request):
 		order.state = 0
 
 		time = request.POST.get('duration')
+		print time
 		time = time.split(' ')
+		
 		try:
 			if len(time) > 1:
 				hour = int(time[0])
@@ -245,6 +252,7 @@ def get_driver_to_order(request):
 			#long_travel = int(request.POST.get('distance'))
 			long_travel = request.POST.get('distance').replace(',', '.')
 			order.long_travel = float(long_travel)
+			print order.time_travel
 			#print order.long_travel
 		except Exception, e:
 			print "Error" + str(e)
@@ -332,7 +340,6 @@ def return_driver_data_result(request):
 		lengths = []
 		for r in results:
 			try:
-				#print results
 				driver = DriverUser.objects.get(user__username = r['username'])
 				cost = driver.rate_km_city * float(r['distance']) + float(r['distance_to_client'].replace(',', '.')) * driver.rate_without_client
 				if cost < driver.rate_min:
@@ -454,7 +461,8 @@ def apply(request):
 		res = request.POST.get('res')
 		client = request.user
 		order = Order.objects.filter(client__client_user__username = client).last()
-		if res == 'ok':
+		print res
+		if res == u'Так':
 			order.state = 3
 		else:
 			order.state = 2

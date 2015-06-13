@@ -70,3 +70,42 @@
 	position: relative;
 	bottom: -3px;
 }
+.order-container .data-client {
+	background-color: rgb(74, 48, 207);
+	color: white;
+	width: 200px;
+	height: 40px;
+	border-radius: 8px;
+}
+.add_order {
+	background-color: #27A215;
+	color: white;
+	width: 200px;
+	height: 40px;
+	border-radius: 8px;
+}
+.clear_order {
+	background-color: #CF3030;
+	color: white;
+	width: 200px;
+	height: 40px;
+	border-radius: 8px;
+}
+
+.user-infa {
+	margin: 0px auto;
+	width: 30%;
+	position: relative;
+	bottom: 270px;
+}
+
+.user-infa table {
+	width: 500px;
+	border-top: 1px solid;
+	border-bottom: 1px solid;
+}
+
+.user-infa table tr td {
+	font-size: 16pt;
+	height: 40px;
+}

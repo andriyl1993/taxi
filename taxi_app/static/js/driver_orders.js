@@ -4,13 +4,18 @@ function getToken() {
 }
 
 $(function() {
-  setInterval(function() {
+  counter = 0;
+  get_orders = setInterval(function() {
     $.ajax({
       url: "/get_orders/",
       type: "POST",
       data: getToken(),
       success: function(orders) {
+        _orders = JSON.parse(orders)
         add_new_orders(orders);
+        if (_orders.length > 0) {
+          window.clearInterval(get_orders);
+        }
       },
     })
   }, 10000);
@@ -49,18 +54,18 @@ function apply_order() {
             res = JSON.parse(res);
             console.log(res);
             if (res.status == "ok") {
-              console.log("apply");
               $(".order-container").append("<div> Замовлення підтверджено </div>");
             } else {
               if (res.status == "clear") {
                 $(".order-container").append("<div> Замовлення відмінено </div>");
                 window.clearInterval(inter);
+                alert("clear");
                 window.location.href = window.location.href;
               }
             }
           }
         });
-      }, 5000);
+      }, 10000);
     }
   });
 }
@@ -71,6 +76,7 @@ function clear_order() {
     type: "POST",
     data: getToken() + "&order=" + my_orders[0] + "&result=clear",
     success: function() {
+      clearTimeout(timer);
       window.location.href = window.location.href;
     }
   });
@@ -95,14 +101,13 @@ function add_new_orders(orders) {
     var div_val = '.order' + order.pk
     $(div_val).append("<h4><label> Замовлення " + "</label></h4>");
     $(div_val).append("<label class='client'>" + "Клієнт - " + order.client + "</label><br>");
-    $(div_val).append("<p><input type='button' value='Дані про клієнта' onclick='user_infa()'></p>");
+    $(div_val).append("<p><input type='button' class='data-client' value='Дані про клієнта' onclick='user_infa()'></div></p>");
     $(div_val).append("<label class='date'>Дата - " + order.date + "</label><br>");
     is_fast = "";
     if (order.is_fast)
       is_fast = "Так";
     else
-      is_fast = "Ні"
-    console.log(order);
+      is_fast = "Ні";
     $(div_val).append("<label class='is_fast'>Швидке - " + is_fast + "</label><br>");
     $(div_val).append("<label class='long_travel'>Відстань - " + order.long_travel + "</label><br>");
     $(div_val).append("<label class='time_travel'>Час - " + order.time_travel + "</label><br>");
@@ -111,6 +116,9 @@ function add_new_orders(orders) {
     $(div_val).append("<input type='button' class='clear_order' value='Відхилити' onclick='clear_order()'></input><br>");
 
     my_orders.push(order.pk);
+    timer = setTimeout(function() {
+      clear_order();
+    }, 120000);
   }
 }
 
@@ -122,9 +130,9 @@ user_infa = function() {
     success: function(res) {
       res = JSON.parse(res);
       $(".user-infa").empty();
-      $(".user-infa").append("<p>Користувач - " + res.username + "</p>");
-      $(".user-infa").append("<p>Рейтинг - " + res.rating + "</p>");
-      $(".user-infa").append("<p>Дата реєстреції - " + res.date_registration + "</p>");
+      $(".user-infa").append("<table><tbody><tr><td>Користувач </td><td>" + res.username + "</td></tr></tbody></table>");
+      $(".user-infa table").append("<tr><td>Рейтинг </td><td>" + res.rating + "</td></tr>");
+      $(".user-infa table").append("<tr><td>Дата реєстреції </td><td>" + res.date_registration + "</td></tr>");
     }
   });
   //$(".user-infa").append("<p>User - " + order.client);
