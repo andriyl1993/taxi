@@ -111,55 +111,6 @@ $(function() {
 });
 
 
-var FunctionOne = function() {
-  var
-    a = $.Deferred(),
-    b = $.Deferred();
-
-  var a_t = Math.random() * 4000;
-
-  // some fake asyc task
-  setTimeout(function() {
-    console.log('a done');
-    a.resolve();
-  }, a_t);
-  console.log("a_t = " + a_t);
-  // some other fake asyc task
-
-  var b_t = Math.random() * 4000;
-
-  setTimeout(function() {
-    console.log('b done');
-    b.resolve();
-  }, b_t);
-  console.log("b_t = " + b_t);
-
-  return $.Deferred(function(def) {
-    $.when(a, b).done(function() {
-      def.resolve();
-    });
-  });
-};
-
-var FunctionTwo = function() {
-  console.log('FunctionTwo');
-};
-
-var FunctionThree = function() {
-  var a = $.Deferred();
-  setTimeout(function() {
-    console.log("three"), a.resolve();
-  }, 2000);
-  return $.Deferred(function(def) {
-    $.when(a).done(function() {
-      def.resolve();
-    })
-  })
-}
-
-FunctionThree().done(FunctionTwo);
-
-
 /*al = function() {
 	setTimeout(function() {
 		alert("data");

@@ -5,6 +5,7 @@
 <head>
 	<title>Taxi</title>
 	<script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
 	<link rel="stylesheet" type="text/css" href="{% static 'bootstrap/css/bootstrap.css' %}"></head>
 	{# <script lanaguage="JavaScript" type="text/javascript" src="{% static 'js/main_menu.js' %}"></script> #}
 <body>
@@ -47,8 +48,10 @@
 	
 	</div>
 		</div>
-		<a href="/" style="text-decoration: none;   color: black; margin-top: 9px;left: 281px; vertical-align: middle;">
-			<span class="glyphicon" style="text-decoration: none; color: black; margin-top: 9px;left: 281px; vertical-align: middle;" aria-hidden="true">Повернутися</span>
+		<a href="/" class="back">
+			<div class="btn-div">
+				<span>Повернутися</span>
+			</div>
 		</a>
 		<div class="footer">
 			<div class="row">

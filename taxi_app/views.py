@@ -20,10 +20,7 @@ import yaml
 driver_state = ['online','has order','offline']
 type_salon = {u"Будь-який": "0", u"Бюджет": "1", u"Бізнес": "2", u"Джип": "3"}
 
-regime_offline = False
-
 def regime(request):
-	print "offline"
 	return HttpResponse("ok")
 
 def index(request):
@@ -36,16 +33,26 @@ def index(request):
 		return render(request, 'index.html')
 	except Exception, e:
 		print str(e)
-		logout(request)
-		return render(request, 'index.html')
+		try:
+			logout(request)
+			return render(request, 'index.html')
+		except:
+			return render(request, 'error.html')
 
 def show_map(request):
-	return render(request, 'map.html')
+	try:
+		return render(request, 'map.html')
+	except:
+		return render(request, 'error.html')
 
 ############registaration and authorization#############################
 
 def sign_up(request):
-	return render(request, 'Signup.html')
+	try:
+		return render(request, 'Signup.html')
+	except:
+		return render(request, 'error.html')
+
 
 def logging(request):
 	if not request.POST:
@@ -236,12 +243,11 @@ def get_driver_to_order(request):
 		order.end_location = loc_end
 
 		order.state = 0
-
-		time = request.POST.get('duration')
-		print time
-		time = time.split(' ')
-		
 		try:
+			time = request.POST.get('duration')
+			print time
+			time = time.split(' ')
+			
 			if len(time) > 1:
 				hour = int(time[0])
 				minutes = int(time[1])
@@ -252,10 +258,10 @@ def get_driver_to_order(request):
 			#long_travel = int(request.POST.get('distance'))
 			long_travel = request.POST.get('distance').replace(',', '.')
 			order.long_travel = float(long_travel)
-			print order.time_travel
-			#print order.long_travel
-		except Exception, e:
-			print "Error" + str(e)
+		except:
+			order.time_travel = 0
+			order.long_travel = 0
+		
 		if request.POST.get('is_fast') != None:
 			order.is_fast = True
 		else:
@@ -314,6 +320,7 @@ def get_driver_to_order(request):
 		return render(request, "state_order.html", {'json_order': js_order, 'order': order, 'drivers': json_drivers})
 	except Exception, e:
 		print "Erorr Last = " + str(e)
+		return render(request, "error.html")
 
 def return_driver_data_result(request):
 	try:
@@ -341,18 +348,23 @@ def return_driver_data_result(request):
 		for r in results:
 			try:
 				driver = DriverUser.objects.get(user__username = r['username'])
+				print driver
 				cost = driver.rate_km_city * float(r['distance']) + float(r['distance_to_client'].replace(',', '.')) * driver.rate_without_client
 				if cost < driver.rate_min:
 					cost = driver.rate_min
+				print cost
 				order = Order.objects.get(pk = r['order_pk'])
 				order.cost = cost
 				drivers.append(r['username'])
 				costs.append(cost)
 				order.order_drivers += r['username'] + ","
 				time = float(r['duration']) + float(r['duration_to_client'])
+				print time
 				leng = float(r['distance']) + float(r['distance_to_client'].replace(',', '.'))
 				order.order_lengths += str(leng) + ","
 				order.order_times += str(time) + ","
+				print order.order_times
+				
 				times.append(time)
 				lengths.append(leng)
 				order.order_costs += str(cost) + ","
@@ -381,8 +393,11 @@ def change_state(request):
 	return HttpResponse("ok")
 
 def driver_order(request):
-	driver = DriverUser.objects.get(user__username = request.user)
-	return render(request, "driver_orders.html", {"driver": driver})
+	try:
+		driver = DriverUser.objects.get(user__username = request.user)
+		return render(request, "driver_orders.html", {"driver": driver})
+	except:
+		return render(request, "error.html")
 
 def get_orders(request):
 	try:
@@ -481,54 +496,59 @@ states = {
 
 
 def history(request):
-	if request.user.is_authenticated():
-		user = request.user
-		client_or_driver = ""
-		us = ClientUser.objects.filter(client_user__username = user)
-		if len(us) < 1:
-			us = DriverUser.objects.filter(user__username = user)
-			orders = Order.objects.filter(driver = us)
-			client_or_driver = "driver"
+	try:
+		if request.user.is_authenticated():
+			user = request.user
+			client_or_driver = ""
+			us = ClientUser.objects.filter(client_user__username = user)
+			if len(us) < 1:
+				us = DriverUser.objects.filter(user__username = user)
+				orders = Order.objects.filter(driver = us)
+				client_or_driver = "driver"
+			else:
+				orders = Order.objects.filter(client = us)
+				client_or_driver = "client"
+			state = [states[str(v.state)] for v in orders]
+			result = []
+			for i in range(0, len(orders)):
+				r = []
+				r.append(orders[i])
+				r.append(state[i])
+				result.append(r)
+			return render(request, "history.html", {"result": result, "user_": client_or_driver})
 		else:
-			orders = Order.objects.filter(client = us)
-			client_or_driver = "client"
-		state = [states[str(v.state)] for v in orders]
-		result = []
-		for i in range(0, len(orders)):
-			r = []
-			r.append(orders[i])
-			r.append(state[i])
-			result.append(r)
-		return render(request, "history.html", {"result": result, "user_": client_or_driver})
-	else:
-		return HttpResponse("ERROR")
+			return HttpResponse("ERROR")
+	except:
+		return render(request, "error.html")
 
 def rating(request):
-	if request.user.is_authenticated():
-		user = request.user
-		user_type = ""
-		us = ClientUser.objects.filter(client_user__username = user)
-		if len(us) < 1:
-			us = DriverUser.objects.filter(user__username = user)
-			user_type = "driver"
-			orders = Order.objects.filter(driver = us)
-			ratings = DriverRating.objects.filter(driver = us)
-		else:
-			orders = Order.objects.filter(client = us)
-			user_type = "client"
-			ratings = ClientRating.objects.filter(client__client_user__username = user)
-		count_orders = len(ratings)
-		rating = 0
-		if count_orders > 0:
-			if user_type == "client":
-				rating = float(sum([r.value for r in ratings])) / float(count_orders)
+	try:
+		if request.user.is_authenticated():
+			user = request.user
+			user_type = ""
+			us = ClientUser.objects.filter(client_user__username = user)
+			if len(us) < 1:
+				us = DriverUser.objects.filter(user__username = user)
+				user_type = "driver"
+				orders = Order.objects.filter(driver = us)
+				ratings = DriverRating.objects.filter(driver = us)
 			else:
-				rating = float(sum([r.avarage_value for r in ratings])) / float(count_orders)
-		return render(request, "rating.html", {"ratings": ratings, "mark": rating, "user_type": user_type})
+				orders = Order.objects.filter(client = us)
+				user_type = "client"
+				ratings = ClientRating.objects.filter(client__client_user__username = user)
+			count_orders = len(ratings)
+			rating = 0
+			if count_orders > 0:
+				if user_type == "client":
+					rating = float(sum([r.value for r in ratings])) / float(count_orders)
+				else:
+					rating = float(sum([r.avarage_value for r in ratings])) / float(count_orders)
+			return render(request, "rating.html", {"ratings": ratings, "mark": rating, "user_type": user_type})
 
-	else:
-		return HttpResponse("ERROR")
-	
+		else:
+			return HttpResponse("ERROR")
+	except:
+		return render(request, "error.html")
 
 def mark_rating(request):
 	try:
@@ -588,21 +608,28 @@ def favourite_drivers(request):
 			return render(request, "favourite_drivers.html", {'fd': fd, 'states': driver_state})
 	except Exception, e:
 		print str(e)
+		return render(request, "error.html")
 			
 
 def driver_profile(request):
-	if request.path.split('/')[-1] != "":
-		user = DriverUser.objects.get(user__username = request.path.split('/')[-1])
-	else:
-		user = DriverUser.objects.get(user__username = request.user.username)
-	return render(request, "user_profile.html", {'useruser':user, "type_user": "driver"})
+	try:
+		if request.path.split('/')[-1] != "":
+			user = DriverUser.objects.get(user__username = request.path.split('/')[-1])
+		else:
+			user = DriverUser.objects.get(user__username = request.user.username)
+		return render(request, "user_profile.html", {'useruser':user, "type_user": "driver"})
+	except:
+		return render(request, "error.html")
 
 def client_profile(request):
-	if request.path.split('/')[-1] != "":
-		user = ClientUser.objects.get(client_user__username = request.path.split('/')[-1])
-	else:
-		user = ClientUser.objects.get(client_user__username = request.user.username)
-	return render(request, "user_profile.html", {'useruser':user, "type_user": "client"})
+	try:
+		if request.path.split('/')[-1] != "":
+			user = ClientUser.objects.get(client_user__username = request.path.split('/')[-1])
+		else:
+			user = ClientUser.objects.get(client_user__username = request.user.username)
+		return render(request, "user_profile.html", {'useruser':user, "type_user": "client"})
+	except:
+		return render(request, "error.html")
 
 def change_client_data(request):
 	client = ClientUser.objects.get(client_user = request.user)
